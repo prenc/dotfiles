@@ -21,6 +21,10 @@ Plug 'morhetz/gruvbox'
 
 Plug 'junegunn/fzf', { 'do': { -> fzf#install() } }
 Plug 'junegunn/fzf.vim'
+
+" Julia
+Plug 'JuliaEditorSupport/julia-vim'
+
 call plug#end()
 
 set nocompatible
@@ -63,6 +67,9 @@ au FileChangedShell,CursorHold * :checktime
 
 " PLUGIN OPTINGS
 "
+
+runtime macros/matchit.vim
+
 " Airline
 let g:airline#extensions#tabline#enabled = 1
 let g:airline#extensions#tabline#formatter = 'unique_tail_improved'
@@ -125,7 +132,7 @@ nnoremap <leader>b :Buffers<CR>
 nnoremap <leader>a :Ag<CR>
 
 " Faster saving
-nnoremap <C-S> :w<CR>
+nnoremap <C-S> :wa<CR>
 
 " Git
 nnoremap <leader>gs :G<CR>
@@ -135,3 +142,41 @@ nnoremap <leader>gd :Gdiff<CR>
 nnoremap <leader>gl :diffget //2<CR>
 nnoremap <leader>gr :diffget //3<CR>
 
+"Remove all trailing whitespace by pressing F5
+nnoremap <silent> <F5> :let _s=@/<Bar>:%s/\s\+$//e<Bar>:let @/=_s<Bar><CR>
+
+"CUDA devel shortcuts
+nnoremap <leader>r :wa<CR> :!clear; and nvcc -std=c++17 main.cu -o main; and ./main<CR>
+
+"Julia test and shit
+"
+function! s:finish_julia_fmt(job) abort
+	set noconfirm
+	" TODO e! shows redefine function error. Why? 
+	silent! e! %
+  	set confirm
+    echo "Julia Lint is done"
+endfunction
+
+function! s:JuliaFmt()
+    let filepath = expand('%:p')
+    if stridx(filepath, '.jl') == -1
+        echo "This is not julia code"
+        return
+    endif
+
+    echo "Julia Format start!!."
+
+    let scriptcmd = "julia -e 'using JuliaFormatter;format(\""
+    let scriptcmd = scriptcmd.filepath
+    let scriptcmd = scriptcmd."\")'"
+    "echo scriptcmd
+ 
+	call setqflist([])
+	let s:job = job_start(
+	\   ["/bin/sh", "-c", scriptcmd],
+	\   {'close_cb': function('s:finish_julia_fmt')})
+endfunction
+
+command! JuliaFmt :call s:JuliaFmt()
+nnoremap <leader>jf :JuliaFmt<CR>
