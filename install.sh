@@ -3,7 +3,7 @@
 mkdir ~/.config
 
 # Tmux stuff
-ln -sf tmux.conf ~/.tmux.conf
+ln -sfr tmux.conf ~/.tmux.conf
 
 if [[ ! -f ~/.tmux/plugins/tpm ]]; then
     git clone https://github.com/tmux-plugins/tpm ~/.tmux/plugins/tpm
@@ -11,10 +11,10 @@ fi
 
 # Alacritty stuff
 mkdir -p ~/.config/alacritty/
-ln -sf alacritty.yml ~/.config/alacritty/alacritty.yml
+ln -sfr alacritty.yml ~/.config/alacritty/alacritty.yml
 
 # Vim stuff
-ln -sf vimrc ~/.vimrc
+ln -sfr vimrc ~/.vimrc
 
 if [[ ! -f ~/.vim/autoload/plug.vim ]]; then
     curl -fLo ~/.vim/autoload/plug.vim --create-dirs \
@@ -25,8 +25,8 @@ fi
 
 mkdir -p ~/.config/fish/functions/
 
-ln -sf fish/config.fish ~/.config/fish/config.fish
-ln -sf fish/functions/fish_mode_prompt.fish ~/.config/fish/functions/fish_mode_prompt.fish
-ln -sf fish/functions/fish_prompt.fish ~/.config/fish/functions/fish_prompt.fish
+ln -sfr fish/config.fish ~/.config/fish/config.fish
+ln -sfr fish/functions/fish_mode_prompt.fish ~/.config/fish/functions/fish_mode_prompt.fish
+ln -sfr fish/functions/fish_prompt.fish ~/.config/fish/functions/fish_prompt.fish
 
 echo "Dotfiles installed!"
