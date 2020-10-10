@@ -7,7 +7,9 @@ Plug 'takac/vim-hardtime'
 Plug 'ap/vim-css-color'
 Plug 'tpope/vim-surround'
 Plug 'tpope/vim-repeat'
+
 Plug 'tpope/vim-fugitive'
+Plug 'airblade/vim-gitgutter'
 
 Plug 'klen/python-mode'
 Plug 'psf/black', { 'commit': 'ce14fa8b497bae2b50ec48b3bd7022573a59cdb1' }
@@ -22,7 +24,6 @@ Plug 'morhetz/gruvbox'
 Plug 'junegunn/fzf', { 'do': { -> fzf#install() } }
 Plug 'junegunn/fzf.vim'
 
-" Julia
 Plug 'JuliaEditorSupport/julia-vim'
 
 call plug#end()
@@ -50,6 +51,8 @@ set nobackup
 set noswapfile
 set bg=dark
 
+set updatetime=100
+
 let g:python_highlight_all = 1
 
 syntax on
@@ -63,7 +66,7 @@ set spelllang=en
 hi SpellBad cterm=underline
 
 " Buffers
-au FileChangedShell,CursorHold * :checktime
+au FileChangedShell * :checktime
 
 " PLUGIN OPTINGS
 "
@@ -104,13 +107,14 @@ let g:fzf_tags_command = 'ctags -R'
 " AWESOME KEYBINDINGS
 "
 
-:let mapleader = ','
+:let mapleader = ' '
 
 " Disable arrow keys in Normal mode
 no <Up> <Nop>
 no <Down> <Nop>
 no <Left> <Nop>
 no <Right> <Nop>
+no <Space> <Nop>
 
 " Disable arrow keys in Insert mode
 ino <Up> <Nop>
@@ -146,15 +150,15 @@ nnoremap <leader>gr :diffget //3<CR>
 nnoremap <silent> <F5> :let _s=@/<Bar>:%s/\s\+$//e<Bar>:let @/=_s<Bar><CR>
 
 "CUDA devel shortcuts
-nnoremap <leader>r :wa<CR> :!clear; and nvcc -std=c++17 main.cu -o main; and ./main<CR>
+nnoremap <leader>r :wa<CR> :make<CR>
 
 "Julia test and shit
 "
 function! s:finish_julia_fmt(job) abort
-	set noconfirm
-	" TODO e! shows redefine function error. Why? 
-	silent! e! %
-  	set confirm
+    set noconfirm
+    " TODO e! shows redefine function error. Why?
+    silent! e! %
+    set confirm
     echo "Julia Lint is done"
 endfunction
 
@@ -171,12 +175,20 @@ function! s:JuliaFmt()
     let scriptcmd = scriptcmd.filepath
     let scriptcmd = scriptcmd."\")'"
     "echo scriptcmd
- 
-	call setqflist([])
-	let s:job = job_start(
-	\   ["/bin/sh", "-c", scriptcmd],
-	\   {'close_cb': function('s:finish_julia_fmt')})
+
+    call setqflist([])
+    let s:job = job_start(
+    \   ["/bin/sh", "-c", scriptcmd],
+    \   {'close_cb': function('s:finish_julia_fmt')})
 endfunction
 
 command! JuliaFmt :call s:JuliaFmt()
 nnoremap <leader>jf :JuliaFmt<CR>
+
+noremap <leader>fb :call julia#toggle_function_blockassign()<CR>
+
+" Git Gutter
+noremap <silent> <leader>gg :GitGutterToggle<CR>
+
+" HardTime :O
+let g:hardtime_default_on = 1
