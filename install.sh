@@ -1,32 +1,32 @@
 #!/bin/bash
 
-mkdir ~/.config
-
-# Tmux stuff
+echo "Copying tmux config..."
 ln -sfr tmux.conf ~/.tmux.conf
 
 if [[ ! -f ~/.tmux/plugins/tpm ]]; then
-    git clone https://github.com/tmux-plugins/tpm ~/.tmux/plugins/tpm
+    echo "Installing tpm..."
+    git clone https://github.com/tmux-plugins/tpm ~/.tmux/plugins/tpm 1>/dev/null
 fi
 
-# Alacritty stuff
+echo "Copying alacritty config..."
 mkdir -p ~/.config/alacritty/
 ln -sfr alacritty.yml ~/.config/alacritty/alacritty.yml
 
-# Vim stuff
+echo "Copying vim config..."
 ln -sfr vimrc ~/.vimrc
+ln -sfr ideavimrc ~/.ideavimrc
 
 if [[ ! -f ~/.vim/autoload/plug.vim ]]; then
+    echo "Installing vimplug..."
     curl -fLo ~/.vim/autoload/plug.vim --create-dirs \
-        https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
+        https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim 1>/dev/null
 fi
 
-# Fish stuff
-
+echo "Copying fish config..."
 mkdir -p ~/.config/fish/functions/
 
 ln -sfr fish/config.fish ~/.config/fish/config.fish
 ln -sfr fish/functions/fish_mode_prompt.fish ~/.config/fish/functions/fish_mode_prompt.fish
 ln -sfr fish/functions/fish_prompt.fish ~/.config/fish/functions/fish_prompt.fish
 
-echo "Dotfiles installed!"
+echo "Script finished"

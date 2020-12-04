@@ -7,6 +7,8 @@ Plug 'takac/vim-hardtime'
 Plug 'ap/vim-css-color'
 Plug 'tpope/vim-surround'
 Plug 'tpope/vim-repeat'
+Plug 'tpope/vim-commentary'
+Plug 'mg979/vim-visual-multi', {'branch': 'master'}
 
 Plug 'tpope/vim-fugitive'
 Plug 'airblade/vim-gitgutter'
@@ -16,6 +18,7 @@ Plug 'psf/black', { 'commit': 'ce14fa8b497bae2b50ec48b3bd7022573a59cdb1' }
 
 Plug 'scrooloose/nerdtree'
 Plug 'tiagofumo/vim-nerdtree-syntax-highlight'
+Plug 'machakann/vim-highlightedyank'
 
 Plug 'vim-airline/vim-airline'
 Plug 'vim-airline/vim-airline-themes'
@@ -149,14 +152,10 @@ nnoremap <leader>gr :diffget //3<CR>
 "Remove all trailing whitespace by pressing F5
 nnoremap <silent> <F5> :let _s=@/<Bar>:%s/\s\+$//e<Bar>:let @/=_s<Bar><CR>
 
-"CUDA devel shortcuts
-nnoremap <leader>r :wa<CR> :make<CR>
-
 "Julia test and shit
 "
 function! s:finish_julia_fmt(job) abort
     set noconfirm
-    " TODO e! shows redefine function error. Why?
     silent! e! %
     set confirm
     echo "Julia Lint is done"
@@ -192,3 +191,6 @@ noremap <silent> <leader>gg :GitGutterToggle<CR>
 
 " HardTime :O
 let g:hardtime_default_on = 1
+
+" Highlight yank
+let g:highlightedyank_highlight_duration = 500

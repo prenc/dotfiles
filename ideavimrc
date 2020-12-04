@@ -1,0 +1,11 @@
+source .vimrc
+
+set easymotion
+set commentary
+set surround
+set exchange
+set textobj-entire
+set multiple-cursors
+set ReplaceWithRegister
+set argtextobj
+set highlightedyank
