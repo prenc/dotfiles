@@ -19,6 +19,7 @@ Plug 'psf/black', { 'commit': 'ce14fa8b497bae2b50ec48b3bd7022573a59cdb1' }
 Plug 'scrooloose/nerdtree'
 Plug 'tiagofumo/vim-nerdtree-syntax-highlight'
 Plug 'machakann/vim-highlightedyank'
+Plug 'easymotion/vim-easymotion'
 
 Plug 'vim-airline/vim-airline'
 Plug 'vim-airline/vim-airline-themes'
@@ -193,4 +194,12 @@ noremap <silent> <leader>gg :GitGutterToggle<CR>
 let g:hardtime_default_on = 1
 
 " Highlight yank
-let g:highlightedyank_highlight_duration = 500
+let g:highlightedyank_highlight_duration = 100
+
+"Easy motion
+let g:EasyMotion_do_mapping = 0
+nmap s <Plug>(easymotion-overwin-f)
+nmap s <Plug>(easymotion-overwin-f2)
+let g:EasyMotion_smartcase = 1
+map <Leader>j <Plug>(easymotion-j)
+map <Leader>k <Plug>(easymotion-k)
