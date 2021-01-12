@@ -14,7 +14,7 @@ Plug 'tpope/vim-fugitive'
 Plug 'airblade/vim-gitgutter'
 
 Plug 'klen/python-mode'
-Plug 'psf/black', { 'commit': 'ce14fa8b497bae2b50ec48b3bd7022573a59cdb1' }
+Plug 'psf/black'
 
 Plug 'scrooloose/nerdtree'
 Plug 'tiagofumo/vim-nerdtree-syntax-highlight'
@@ -29,6 +29,7 @@ Plug 'junegunn/fzf', { 'do': { -> fzf#install() } }
 Plug 'junegunn/fzf.vim'
 
 Plug 'JuliaEditorSupport/julia-vim'
+Plug 'kdheepak/JuliaFormatter.vim'
 
 call plug#end()
 
@@ -47,10 +48,9 @@ set tabstop=4
 
 set ruler
 set hidden
-"set mouse=nicr
 
-set path+=**					" Searches current directory recursively.
-set wildmenu					" Display all matches when tab complete.
+set path+=**
+set wildmenu
 set nobackup
 set noswapfile
 set bg=dark
@@ -70,7 +70,7 @@ set spelllang=en
 hi SpellBad cterm=underline
 
 " Buffers
-au FileChangedShell * :checktime
+au FileChangedShell * :checktime "?
 
 " PLUGIN OPTINGS
 "
@@ -96,7 +96,7 @@ let g:pymode_rope_complete_on_dot = 0
 let g:pymode_folding = 0
 
 " NERDTree
-map <C-n> :NERDTreeToggle<CR>
+nnoremap <M-n> :NERDTreeToggle<CR>
 let g:NERDTreeDirArrowExpandable = '▸'
 let g:NERDTreeDirArrowCollapsible = '▾'
 let NERDTreeShowLineNumbers=1
@@ -153,39 +153,9 @@ nnoremap <leader>gr :diffget //3<CR>
 "Remove all trailing whitespace by pressing F5
 nnoremap <silent> <F5> :let _s=@/<Bar>:%s/\s\+$//e<Bar>:let @/=_s<Bar><CR>
 
-"Julia test and shit
-"
-function! s:finish_julia_fmt(job) abort
-    set noconfirm
-    silent! e! %
-    set confirm
-    echo "Julia Lint is done"
-endfunction
-
-function! s:JuliaFmt()
-    let filepath = expand('%:p')
-    if stridx(filepath, '.jl') == -1
-        echo "This is not julia code"
-        return
-    endif
-
-    echo "Julia Format start!!."
-
-    let scriptcmd = "julia -e 'using JuliaFormatter;format(\""
-    let scriptcmd = scriptcmd.filepath
-    let scriptcmd = scriptcmd."\")'"
-    "echo scriptcmd
-
-    call setqflist([])
-    let s:job = job_start(
-    \   ["/bin/sh", "-c", scriptcmd],
-    \   {'close_cb': function('s:finish_julia_fmt')})
-endfunction
-
-command! JuliaFmt :call s:JuliaFmt()
-nnoremap <leader>jf :JuliaFmt<CR>
-
-noremap <leader>fb :call julia#toggle_function_blockassign()<CR>
+" Julia
+nnoremap <leader>jf :JuliaFormatterFormat<CR>
+vnoremap <leader>jf :JuliaFormatterFormat<CR>
 
 " Git Gutter
 noremap <silent> <leader>gg :GitGutterToggle<CR>

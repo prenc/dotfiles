@@ -3,14 +3,14 @@
 # Any items in the `env` entry below will be added as
 # environment variables. Some entries may override variables
 # set by alacritty itself.
-#env:
+# env:
   # TERM variable
   #
   # This value is used to set the `$TERM` environment variable for
   # each instance of Alacritty. If it is not present, alacritty will
   # check the local terminfo database and use `alacritty` if it is
   # available, otherwise `xterm-256color` is used.
-  #TERM: alacritty
+  # TERM: alacritty
 
 window:
   # Window dimensions (changes require restart)
@@ -35,7 +35,7 @@ window:
   # by DPI and the specified value is always added at both opposing sides.
   padding:
     x: 5
-    y: 5 
+    y: 5
 
   # Spread additional padding evenly around the terminal content.
   #dynamic_padding: false
@@ -110,7 +110,7 @@ font:
     family: Fira Code
 
     # The `style` can be specified to pick a specific face.
-    style: Bold 
+    style: Bold
 
   # Italic font face
   italic:
@@ -174,14 +174,16 @@ font:
 colors:
   # Default colors
   primary:
-    background: '#1d2021'
-    foreground: '#ebdbb2'
+      # background:  '#1d2021' # hard contrast
+      background: '#282828'
+      # background: '#32302f' # soft contrast
+      foreground: '#ebdbb2'
 
   # Normal colors
   normal:
     black:   '#282828'
     red:     '#cc241d'
-    green:   '#98971a'
+    green:   '#97971a'
     yellow:  '#d79921'
     blue:    '#458588'
     magenta: '#b16286'
@@ -226,9 +228,9 @@ colors:
   #
   # Colors for the cursor when the vi mode is active. If these are unset, the
   # cursor color will be the inverse of the cell color.
-  #vi_mode_cursor:
-  #  text: '#000000'
-  #  cursor: '#ffffff'
+  # vi_mode_cursor:
+  #   text: '#000000'
+  #   cursor: '#ffffff'
 
   # Selection colors
   #
