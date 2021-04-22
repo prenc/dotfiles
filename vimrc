@@ -31,6 +31,10 @@ Plug 'junegunn/fzf.vim'
 Plug 'JuliaEditorSupport/julia-vim'
 Plug 'kdheepak/JuliaFormatter.vim'
 
+Plug 'codota/tabnine-vim'
+
+Plug 'Yggdroot/indentLine'
+
 call plug#end()
 
 set nocompatible
@@ -161,7 +165,7 @@ vnoremap <leader>jf :JuliaFormatterFormat<CR>
 noremap <silent> <leader>gg :GitGutterToggle<CR>
 
 " HardTime :O
-let g:hardtime_default_on = 1
+let g:hardtime_default_on = 0
 
 " Highlight yank
 let g:highlightedyank_highlight_duration = 100

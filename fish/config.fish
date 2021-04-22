@@ -14,3 +14,10 @@ alias lt='ls --tree'
 
 set -x EDITOR vim
 set -x PAGER less
+set -x TERM xterm-256color
+
+function fish_user_key_bindings
+    for mode in insert default visual
+        bind -M $mode \cf forward-char
+    end
+end
