@@ -18,6 +18,7 @@ Plug 'psf/black'
 
 Plug 'scrooloose/nerdtree'
 Plug 'tiagofumo/vim-nerdtree-syntax-highlight'
+Plug 'kana/vim-textobj-entire'
 Plug 'machakann/vim-highlightedyank'
 Plug 'easymotion/vim-easymotion'
 
@@ -44,7 +45,7 @@ set t_Co=256
 
 set relativenumber
 set linebreak
-set number
+" set number
 set expandtab
 set smarttab
 set shiftwidth=4
@@ -117,6 +118,8 @@ let g:fzf_tags_command = 'ctags -R'
 
 :let mapleader = ' '
 
+nmap S c^
+
 " Disable arrow keys in Normal mode
 no <Up> <Nop>
 no <Down> <Nop>
@@ -172,8 +175,8 @@ let g:highlightedyank_highlight_duration = 100
 
 "Easy motion
 let g:EasyMotion_do_mapping = 0
-nmap s <Plug>(easymotion-overwin-f)
-nmap s <Plug>(easymotion-overwin-f2)
+nmap <leader>s <Plug>(easymotion-overwin-f)
+nmap <leader>s <Plug>(easymotion-overwin-f2)
 let g:EasyMotion_smartcase = 1
-map <Leader>j <Plug>(easymotion-j)
-map <Leader>k <Plug>(easymotion-k)
+" map <Leader>j <Plug>(easymotion-j)
+" map <Leader>k <Plug>(easymotion-k)
