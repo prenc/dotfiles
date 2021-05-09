@@ -2,13 +2,14 @@
 call plug#begin('~/.vim/bundle')
 
 Plug 'tpope/vim-sensible' " More sensible defaults
-Plug 'takac/vim-hardtime'
-
-Plug 'ap/vim-css-color'
 Plug 'tpope/vim-surround'
 Plug 'tpope/vim-repeat'
 Plug 'tpope/vim-commentary'
+Plug 'tpope/vim-unimpaired'
+
 Plug 'mg979/vim-visual-multi', {'branch': 'master'}
+
+Plug 'ap/vim-css-color'
 
 Plug 'tpope/vim-fugitive'
 Plug 'airblade/vim-gitgutter'
@@ -16,9 +17,11 @@ Plug 'airblade/vim-gitgutter'
 Plug 'klen/python-mode'
 Plug 'psf/black'
 
+Plug 'kana/vim-textobj-user'
+Plug 'kana/vim-textobj-entire'
+
 Plug 'scrooloose/nerdtree'
 Plug 'tiagofumo/vim-nerdtree-syntax-highlight'
-Plug 'kana/vim-textobj-entire'
 Plug 'machakann/vim-highlightedyank'
 Plug 'easymotion/vim-easymotion'
 
@@ -36,6 +39,7 @@ Plug 'codota/tabnine-vim'
 
 Plug 'Yggdroot/indentLine'
 
+Plug 'takac/vim-hardtime'
 call plug#end()
 
 set nocompatible
