@@ -38,6 +38,7 @@ Plug 'kdheepak/JuliaFormatter.vim'
 Plug 'codota/tabnine-vim'
 
 Plug 'Yggdroot/indentLine'
+Plug 'jpalardy/vim-slime'
 
 Plug 'takac/vim-hardtime'
 call plug#end()
@@ -47,22 +48,22 @@ set nocompatible
 set laststatus=2
 set t_Co=256
 
-set relativenumber
+set relativenumber number "hybrid
 set linebreak
-" set number
 set expandtab
 set smarttab
 set shiftwidth=4
 set tabstop=4
 
 set ruler
-set hidden
+" set hidden
 
 set path+=**
 set wildmenu
 set nobackup
 set noswapfile
 set bg=dark
+set autochdir
 
 set updatetime=100
 
@@ -151,13 +152,13 @@ nnoremap <leader>b :Buffers<CR>
 nnoremap <leader>a :Ag<CR>
 
 " Faster saving
-nnoremap <C-S> :wa<CR>
+nnoremap <C-S> :w<CR>
 
 " Git
-nnoremap <leader>gs :G<CR>
-nnoremap <leader>gc :Gcommit<CR>
-nnoremap <leader>gb :Gblame<CR>
-nnoremap <leader>gd :Gdiff<CR>
+nnoremap <leader>gs :Git <CR>
+nnoremap <leader>gc :Git commit<CR>
+nnoremap <leader>gb :Git blame<CR>
+nnoremap <leader>gd :Git diff<CR>
 nnoremap <leader>gl :diffget //2<CR>
 nnoremap <leader>gr :diffget //3<CR>
 
@@ -184,3 +185,11 @@ nmap <leader>s <Plug>(easymotion-overwin-f2)
 let g:EasyMotion_smartcase = 1
 " map <Leader>j <Plug>(easymotion-j)
 " map <Leader>k <Plug>(easymotion-k)
+
+"Slime
+let g:slime_target = "tmux"
+let g:slime_paste_file = tempname()
+let g:slime_default_config = {"socket_name": get(split($TMUX, ","), 0), "target_pane": ":.1"}
+
+" Julia vim
+let g:latex_to_unicode_tab = 0
