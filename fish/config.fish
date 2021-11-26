@@ -15,6 +15,7 @@ alias dm='cd ~/Documents'
 alias dw='cd ~/Downloads'
 
 set -x EDITOR vim
+set -x BROWSER firefox
 set -x PAGER less
 set -x TERM xterm-256color
 
