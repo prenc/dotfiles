@@ -9,6 +9,7 @@ alias l='ls'
 alias la='ls -a'
 alias lla='ls -la'
 alias lt='ls --tree'
+alias llt='ll -t'
 
 alias dm='cd ~/Documents'
 alias dw='cd ~/Downloads'

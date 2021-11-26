@@ -6,6 +6,7 @@ Plug 'tpope/vim-surround'
 Plug 'tpope/vim-repeat'
 Plug 'tpope/vim-commentary'
 Plug 'tpope/vim-unimpaired'
+Plug 'sickill/vim-pasta'
 
 Plug 'mg979/vim-visual-multi', {'branch': 'master'}
 
@@ -35,7 +36,10 @@ Plug 'junegunn/fzf.vim'
 Plug 'JuliaEditorSupport/julia-vim'
 Plug 'kdheepak/JuliaFormatter.vim'
 
+Plug 'tabnine/YouCompleteMe'
 Plug 'codota/tabnine-vim'
+
+Plug 'dense-analysis/ale'
 
 Plug 'Yggdroot/indentLine'
 Plug 'jpalardy/vim-slime'
@@ -189,7 +193,7 @@ let g:EasyMotion_smartcase = 1
 "Slime
 let g:slime_target = "tmux"
 let g:slime_paste_file = tempname()
-let g:slime_default_config = {"socket_name": get(split($TMUX, ","), 0), "target_pane": ":.1"}
+let g:slime_default_config = {"socket_name": get(split($TMUX, ","), 0), "target_pane": ":.0"}
 
 " Julia vim
 let g:latex_to_unicode_tab = 0
