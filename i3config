@@ -4,8 +4,8 @@
 # Set mod key (Mod1=<Alt>, Mod4=<Super>)
 set $mod Mod1
 
-# Swap caps and 
-escexec_always --no-startup-id xmodmap -e "clear lock"
+# Swap caps and esc
+exec_always --no-startup-id xmodmap -e "clear lock"
 exec_always --no-startup-id xmodmap -e "keycode 9 = Caps_Lock NoSymbol Caps_Lock"
 exec_always --no-startup-id xmodmap -e "keycode 66 = Escape NoSymbol Escape"
 
