@@ -25,3 +25,9 @@ function fish_user_key_bindings
         bind -M $mode \cf forward-char
     end
 end
+
+# >>> conda initialize >>>
+# !! Contents within this block are managed by 'conda init' !!
+eval /opt/miniconda3/bin/conda "shell.fish" "hook" $argv | source
+# <<< conda initialize <<<
+
