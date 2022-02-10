@@ -33,6 +33,7 @@ floating_modifier $mod
 
 # start a terminal
 bindsym $mod+Return exec rofi -show drun -show-icons -theme gruvbox-dark-soft -font "Fira Code 12"
+bindsym $mod+Shift+Return exec rofi -show window -show-icons -theme gruvbox-dark-soft -font "Fira Code 12"
 
 # kill focused window
 bindsym $mod+c kill
@@ -62,12 +63,11 @@ bindsym $mod+Ctrl+m exec pavucontrol
 bindsym $mod+F3 exec pcmanfm
 # bindsym $mod+F3 exec ranger
 bindsym $mod+Shift+F3 exec pcmanfm_pkexec
-bindsym $mod+F5 exec terminal -e 'mocp'
 bindsym $mod+t exec --no-startup-id pkill picom
-bindsym $mod+Ctrl+t exec --no-startup-id picom -b
+bindsym $mod+Ctrl+t exec --no-startup-id picom -b -c -l0 -t0 -r0 -o.00
 bindsym $mod+Shift+d --release exec "killall dunst; exec notify-send 'restart dunst'"
 bindsym $mod+Shift+p --release exec --no-startup-id "maim -s | xclip -selection clipboard -t image/png"
-bindsym $mod+Ctrl+Shift+h exec xdg-open /usr/share/doc/manjaro/i3_help.pdf
+# bindsym $mod+Ctrl+Shift+h exec xdg-open /usr/share/doc/manjaro/i3_help.pdf
 bindsym $mod+Ctrl+x --release exec --no-startup-id xkill
 
 # focus_follows_mouse no
@@ -172,13 +172,14 @@ bindsym $mod+Shift+e move container to workspace $ws7; workspace $ws7
 bindsym $mod+Shift+r move container to workspace $ws8; workspace $ws8
 
 # Open applications on specific workspaces
-assign [class="Firefox"] $ws1
+assign [class="firefox"] $ws1
+assign [class="zoom"] $ws1
+
 assign [class="Thunderbird"] $ws4
 assign [class="Spotify"] $ws4
-assign [class="Teams"] $ws7
+
+assign [class="teams"] $ws7
 assign [class="Slack"] $ws8
-# assign [class="Pale moon"] $ws2
-# assign [class="Pcmanfm"] $ws3
 
 # Open specific applications in floating mode
 for_window [title="alsamixer"] floating enable border pixel 1
@@ -193,21 +194,28 @@ for_window [class="Lightdm-settings"] floating enable
 for_window [class="Lxappearance"] floating enable sticky enable border normal
 for_window [class="Manjaro-hello"] floating enable
 for_window [class="Manjaro Settings Manager"] floating enable border normal
-for_window [title="MuseScore: Play Panel"] floating enable
 for_window [class="Nitrogen"] floating enable sticky enable border normal
 for_window [class="Oblogout"] fullscreen enable
 for_window [class="octopi"] floating enable
-for_window [title="About Pale Moon"] floating enable
 for_window [class="Pamac-manager"] floating enable
 for_window [class="Pavucontrol"] floating enable
 for_window [class="qt5ct"] floating enable sticky enable border normal
 for_window [class="Qtconfig-qt4"] floating enable sticky enable border normal
 for_window [class="Simple-scan"] floating enable border normal
 for_window [class="(?i)System-config-printer.py"] floating enable border normal
-for_window [class="Skype"] floating enable border normal
 for_window [class="Timeset-gui"] floating enable border normal
 for_window [class="(?i)virtualbox"] floating enable border normal
 for_window [class="Xfburn"] floating enable
+
+for_window [class="^jetbrains" title="^Welcome"] floating enable
+
+# Chromium, testing...
+for_window [class="Chromium"] move scratchpad
+
+# Zoom
+for_window [class="zoom"] floating enable sticky
+for_window [class="zoom" title="Zoom Meeting"] floating disable
+for_window [class="zoom" title="Zoom - [a-zA-Z]+ Account"] floating disable
 
 # switch to workspace with urgent window automatically
 for_window [urgent=latest] focus
@@ -267,15 +275,15 @@ bindsym $mod+9 exec --no-startup-id blurlock
 
 # Autostart applications
 exec --no-startup-id /usr/lib/polkit-gnome/polkit-gnome-authentication-agent-1
-exec --no-startup-id nitrogen --restore; sleep 1; picom -b
+exec --no-startup-id nitrogen --restore; sleep 1; picom -b -c -l0 -t0 -r0 -o.00
 # exec --no-startup-id manjaro-hello
 exec --no-startup-id nm-applet
 exec --no-startup-id xfce4-power-manager
 exec --no-startup-id pamac-tray
-exec --no-startup-id clipit
+# exec --no-startup-id clipit
 exec --no-startup-id blueman-applet
 # exec_always --no-startup-id sbxkb
-exec --no-startup-id start_conky_maia
+# exec --no-startup-id start_conky_maia
 # exec --no-startup-id start_conky_green
 exec --no-startup-id xautolock -time 30 -locker blurlock
 exec_always --no-startup-id ff-theme-util
