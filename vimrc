@@ -8,7 +8,7 @@ Plug 'tpope/vim-commentary'
 Plug 'tpope/vim-unimpaired'
 Plug 'sickill/vim-pasta'
 
-Plug 'mg979/vim-visual-multi', {'branch': 'master'}
+Plug 'terryma/vim-multiple-cursors'
 
 Plug 'ap/vim-css-color'
 
@@ -21,10 +21,19 @@ Plug 'psf/black'
 Plug 'kana/vim-textobj-user'
 Plug 'kana/vim-textobj-entire'
 
-Plug 'scrooloose/nerdtree'
+Plug 'preservim/nerdtree'
+" Plug 'scrooloose/nerdtree-project-plugin'
 Plug 'tiagofumo/vim-nerdtree-syntax-highlight'
-Plug 'machakann/vim-highlightedyank'
+
 Plug 'easymotion/vim-easymotion'
+
+" Small plugins
+Plug 'vim-scripts/ReplaceWithRegister'
+Plug 'vim-scripts/argtextobj.vim'
+Plug 'tommcdo/vim-exchange'
+Plug 'machakann/vim-highlightedyank'
+Plug 'dbakker/vim-paragraph-motion'
+Plug 'michaeljsmith/vim-indent-object'
 
 Plug 'vim-airline/vim-airline'
 Plug 'vim-airline/vim-airline-themes'
@@ -125,7 +134,7 @@ let g:fzf_tags_command = 'ctags -R'
 " AWESOME KEYBINDINGS
 "
 
-:let mapleader = ' '
+let mapleader = ' '
 
 nmap S c^
 
@@ -197,3 +206,14 @@ let g:slime_default_config = {"socket_name": get(split($TMUX, ","), 0), "target_
 
 " Julia vim
 let g:latex_to_unicode_tab = 0
+
+" Multi-cursor
+let g:multi_cursor_use_default_mapping=0
+let g:multi_cursor_start_word_key      = '<C-n>'
+let g:multi_cursor_select_all_word_key = '<C-a>'
+let g:multi_cursor_start_key           = 'g<C-n>'
+let g:multi_cursor_select_all_key      = 'g<C-a>'
+let g:multi_cursor_next_key            = '<C-n>'
+let g:multi_cursor_prev_key            = '<C-p>'
+let g:multi_cursor_skip_key            = '<C-x>'
+let g:multi_cursor_quit_key            = '<Esc>'

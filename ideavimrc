@@ -1,11 +1,22 @@
-source .vimrc
+source ~/.vimrc
 
-set easymotion
-set commentary
-set surround
-set exchange
-set textobj-entire
-set multiple-cursors
-set ReplaceWithRegister
-set argtextobj
-set highlightedyank
+set ideajoin
+
+map <leader>r <Action>(ReformatCode)
+map <leader>d <Action>(Debug)
+map <leader>b <Action>(ToggleLineBreakpoint)
+
+nmap <C-n> <Plug>NextWholeOccurrence
+xmap <C-n> <Plug>NextWholeOccurrence
+nmap g<C-n> <Plug>NextOccurrence
+xmap g<C-n> <Plug>NextOccurrence
+nmap <C-x> <Plug>SkipOccurrence
+xmap <C-x> <Plug>SkipOccurrence
+nmap <C-p> <Plug>RemoveOccurrence
+xmap <C-p> <Plug>RemoveOccurrence
+
+sethandler <C-a> n-x:vim
+nmap <C-a> <Plug>AllWholeOccurrences
+xmap <C-a> <Plug>AllWholeOccurrences
+nmap g<C-a> <Plug>AllOccurrences
+xmap g<C-a> <Plug>AllOccurrences
