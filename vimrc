@@ -1,12 +1,14 @@
 " Plugins
 call plug#begin('~/.vim/bundle')
-
 Plug 'tpope/vim-sensible' " More sensible defaults
 Plug 'tpope/vim-surround'
 Plug 'tpope/vim-repeat'
 Plug 'tpope/vim-commentary'
 Plug 'tpope/vim-unimpaired'
 Plug 'sickill/vim-pasta'
+Plug 'Raimondi/delimitMate'
+Plug 'Yggdroot/indentLine'
+Plug 'jpalardy/vim-slime'
 
 Plug 'terryma/vim-multiple-cursors'
 
@@ -42,18 +44,13 @@ Plug 'morhetz/gruvbox'
 Plug 'junegunn/fzf', { 'do': { -> fzf#install() } }
 Plug 'junegunn/fzf.vim'
 
-Plug 'JuliaEditorSupport/julia-vim'
-Plug 'kdheepak/JuliaFormatter.vim'
-
 Plug 'tabnine/YouCompleteMe'
 Plug 'codota/tabnine-vim'
 
-Plug 'dense-analysis/ale'
+Plug 'JuliaEditorSupport/julia-vim'
+" Plug 'autozimu/LanguageClient-neovim', {'branch': 'next', 'do': 'bash install.sh'}
+Plug 'kdheepak/JuliaFormatter.vim'
 
-Plug 'Yggdroot/indentLine'
-Plug 'jpalardy/vim-slime'
-
-Plug 'takac/vim-hardtime'
 call plug#end()
 
 set nocompatible
@@ -78,7 +75,7 @@ set noswapfile
 set bg=dark
 set autochdir
 
-set updatetime=100
+set updatetime=300
 
 let g:python_highlight_all = 1
 
@@ -97,7 +94,6 @@ au FileChangedShell * :checktime "?
 
 " PLUGIN OPTINGS
 "
-
 runtime macros/matchit.vim
 
 " Airline
@@ -119,7 +115,7 @@ let g:pymode_rope_complete_on_dot = 0
 let g:pymode_folding = 0
 
 " NERDTree
-nnoremap <M-n> :NERDTreeToggle<CR>
+nnoremap <C-m> :NERDTreeToggle<CR>
 let g:NERDTreeDirArrowExpandable = '▸'
 let g:NERDTreeDirArrowCollapsible = '▾'
 let NERDTreeShowLineNumbers=1
@@ -175,7 +171,7 @@ nnoremap <leader>gd :Git diff<CR>
 nnoremap <leader>gl :diffget //2<CR>
 nnoremap <leader>gr :diffget //3<CR>
 
-"Remove all trailing whitespace by pressing F5
+" Remove all trailing whitespace by pressing F5
 nnoremap <silent> <F5> :let _s=@/<Bar>:%s/\s\+$//e<Bar>:let @/=_s<Bar><CR>
 
 " Julia
@@ -184,9 +180,6 @@ vnoremap <leader>jf :JuliaFormatterFormat<CR>
 
 " Git Gutter
 noremap <silent> <leader>gg :GitGutterToggle<CR>
-
-" HardTime :O
-let g:hardtime_default_on = 0
 
 " Highlight yank
 let g:highlightedyank_highlight_duration = 100
@@ -202,7 +195,7 @@ let g:EasyMotion_smartcase = 1
 "Slime
 let g:slime_target = "tmux"
 let g:slime_paste_file = tempname()
-let g:slime_default_config = {"socket_name": get(split($TMUX, ","), 0), "target_pane": ":.0"}
+let g:slime_default_config = {"socket_name": get(split($TMUX, ","), 0), "target_pane": ":.1"}
 
 " Julia vim
 let g:latex_to_unicode_tab = 0
