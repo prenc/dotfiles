@@ -41,11 +41,10 @@ Plug 'vim-airline/vim-airline'
 Plug 'vim-airline/vim-airline-themes'
 Plug 'morhetz/gruvbox'
 
+Plug 'github/copilot.vim'
+
 Plug 'junegunn/fzf', { 'do': { -> fzf#install() } }
 Plug 'junegunn/fzf.vim'
-
-Plug 'tabnine/YouCompleteMe'
-Plug 'codota/tabnine-vim'
 
 Plug 'JuliaEditorSupport/julia-vim'
 " Plug 'autozimu/LanguageClient-neovim', {'branch': 'next', 'do': 'bash install.sh'}
