@@ -24,7 +24,6 @@ Plug 'kana/vim-textobj-user'
 Plug 'kana/vim-textobj-entire'
 
 Plug 'preservim/nerdtree'
-" Plug 'scrooloose/nerdtree-project-plugin'
 Plug 'tiagofumo/vim-nerdtree-syntax-highlight'
 
 Plug 'easymotion/vim-easymotion'
@@ -131,8 +130,6 @@ let g:fzf_tags_command = 'ctags -R'
 
 let mapleader = ' '
 
-nmap S c^
-
 " Disable arrow keys in Normal mode
 no <Up> <Nop>
 no <Down> <Nop>
@@ -185,8 +182,8 @@ let g:highlightedyank_highlight_duration = 100
 
 "Easy motion
 let g:EasyMotion_do_mapping = 0
-nmap <leader>s <Plug>(easymotion-overwin-f)
-nmap <leader>s <Plug>(easymotion-overwin-f2)
+" nmap <leader>s <Plug>(easymotion-overwin-f)
+" nmap <leader>s <Plug>(easymotion-overwin-f2)
 let g:EasyMotion_smartcase = 1
 " map <Leader>j <Plug>(easymotion-j)
 " map <Leader>k <Plug>(easymotion-k)

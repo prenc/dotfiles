@@ -1,10 +1,12 @@
 source ~/.vimrc
 
 set ideajoin
+set sneak
 
 map <leader>r <Action>(ReformatCode)
 map <leader>d <Action>(Debug)
 map <leader>b <Action>(ToggleLineBreakpoint)
+map <leader>u <Action>(Vcs.RollbackChangedLines)
 
 nmap <C-n> <Plug>NextWholeOccurrence
 xmap <C-n> <Plug>NextWholeOccurrence
