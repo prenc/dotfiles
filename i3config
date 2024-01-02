@@ -47,7 +47,8 @@ bindsym $mod+z exec --no-startup-id morc_menu
 
 ##exec --no-startup-id volumeicon
 ##bindsym $mod+Ctrl+m exec terminal -e 'alsamixer'
-exec --no-startup-id pulseaudio -D
+# To init Pulseaudio properly, systemctl --user enable pulseaudio
+# exec --no-startup-id pulseaudio -D
 exec --no-startup-id pa-applet
 bindsym $mod+Ctrl+m exec pavucontrol
 

@@ -10,7 +10,7 @@ fi
 
 echo "Setting alacritty config..."
 mkdir -p ~/.config/alacritty/
-ln -sfr alacritty.yml ~/.config/alacritty/alacritty.yml
+ln -sfr alacritty.toml ~/.config/alacritty/alacritty.toml
 
 echo "Setting vim config..."
 ln -sfr vimrc ~/.vimrc
