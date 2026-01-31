@@ -1,53 +1,62 @@
 " Plugins
 call plug#begin('~/.vim/bundle')
-Plug 'tpope/vim-sensible' " More sensible defaults
-Plug 'tpope/vim-surround'
+
+Plug 'github/copilot.vim'
+
+" Git
+Plug 'tpope/vim-fugitive'
+Plug 'airblade/vim-gitgutter'
+
+Plug 'tpope/vim-sensible'
 Plug 'tpope/vim-repeat'
-Plug 'tpope/vim-commentary'
 Plug 'tpope/vim-unimpaired'
+
+" Plugins also used in IdeaVim
+Plug 'vim-scripts/argtextobj.vim'
+Plug 'tpope/vim-commentary'
+Plug 'easymotion/vim-easymotion'
+Plug 'machakann/vim-highlightedyank'
+Plug 'michaeljsmith/vim-indent-object'
+Plug 'chrisbra/matchit'
+Plug 'mg979/vim-visual-multi'
+Plug 'dbakker/vim-paragraph-motion'
+Plug 'vim-scripts/ReplaceWithRegister'
+Plug 'tommcdo/vim-exchange'
+Plug 'justinmk/vim-sneak'
+Plug 'tpope/vim-surround'
+Plug 'kana/vim-textobj-entire'
+
+" Nerdtree, also used in IdeaVim
+Plug 'preservim/nerdtree'
+" Plug 'tiagofumo/vim-nerdtree-syntax-highlight'
+
+" Other
+Plug 'junegunn/vim-peekaboo'
+Plug 'ap/vim-css-color'
+
 Plug 'sickill/vim-pasta'
 Plug 'Raimondi/delimitMate'
 Plug 'Yggdroot/indentLine'
 Plug 'jpalardy/vim-slime'
-
-Plug 'terryma/vim-multiple-cursors'
-
-Plug 'ap/vim-css-color'
-
-Plug 'tpope/vim-fugitive'
-Plug 'airblade/vim-gitgutter'
-
-Plug 'klen/python-mode'
-Plug 'psf/black'
-
 Plug 'kana/vim-textobj-user'
-Plug 'kana/vim-textobj-entire'
 
-Plug 'preservim/nerdtree'
-Plug 'tiagofumo/vim-nerdtree-syntax-highlight'
-
-Plug 'easymotion/vim-easymotion'
-
-" Small plugins
-Plug 'vim-scripts/ReplaceWithRegister'
-Plug 'vim-scripts/argtextobj.vim'
-Plug 'tommcdo/vim-exchange'
-Plug 'machakann/vim-highlightedyank'
-Plug 'dbakker/vim-paragraph-motion'
-Plug 'michaeljsmith/vim-indent-object'
-
+" Theme
 Plug 'vim-airline/vim-airline'
 Plug 'vim-airline/vim-airline-themes'
 Plug 'morhetz/gruvbox'
 
-Plug 'github/copilot.vim'
+" Python
+Plug 'klen/python-mode'
+Plug 'psf/black'
 
+" fzf
 Plug 'junegunn/fzf', { 'do': { -> fzf#install() } }
 Plug 'junegunn/fzf.vim'
 
-Plug 'JuliaEditorSupport/julia-vim'
+" Julia
+" Plug 'JuliaEditorSupport/julia-vim'
 " Plug 'autozimu/LanguageClient-neovim', {'branch': 'next', 'do': 'bash install.sh'}
-Plug 'kdheepak/JuliaFormatter.vim'
+" Plug 'kdheepak/JuliaFormatter.vim'
 
 call plug#end()
 
@@ -88,11 +97,7 @@ set spelllang=en
 hi SpellBad cterm=underline
 
 " Buffers
-au FileChangedShell * :checktime "?
-
-" PLUGIN OPTINGS
-"
-runtime macros/matchit.vim
+au FileChangedShell * checktime
 
 " Airline
 let g:airline#extensions#tabline#enabled = 1
@@ -196,13 +201,9 @@ let g:slime_default_config = {"socket_name": get(split($TMUX, ","), 0), "target_
 " Julia vim
 let g:latex_to_unicode_tab = 0
 
-" Multi-cursor
-let g:multi_cursor_use_default_mapping=0
-let g:multi_cursor_start_word_key      = '<C-n>'
-let g:multi_cursor_select_all_word_key = '<C-a>'
-let g:multi_cursor_start_key           = 'g<C-n>'
-let g:multi_cursor_select_all_key      = 'g<C-a>'
-let g:multi_cursor_next_key            = '<C-n>'
-let g:multi_cursor_prev_key            = '<C-p>'
-let g:multi_cursor_skip_key            = '<C-x>'
-let g:multi_cursor_quit_key            = '<Esc>'
+" vim-visual-multi (multi-cursor)
+let g:VM_maps = {}
+let g:VM_maps['Find Under']         = '<C-n>'
+let g:VM_maps['Find Subword Under'] = '<C-n>'
+let g:VM_maps['Select All']         = '<C-a>'
+let g:VM_maps['Skip Region']        = '<C-x>'

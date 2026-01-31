@@ -1,7 +1,14 @@
 source ~/.vimrc
 
 set ideajoin
+
 set sneak
+
+set functiontextobj
+set matchit
+set peekaboo
+
+set which-key
 
 map <leader>r <Action>(ReformatCode)
 map <leader>d <Action>(Debug)
