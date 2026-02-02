@@ -87,6 +87,24 @@ main() {
         "$HOME/.vim/autoload/plug.vim" \
         "vim-plug"
 
+    # --- IPython / ptipython ---
+    log_step "Configuring ipython"
+    safe_link \
+        "$PROJECT_DIR/ipython/profile_default/ipython_config.py" \
+        "$HOME/.ipython/profile_default/ipython_config.py" \
+        "ipython config"
+    safe_link \
+        "$PROJECT_DIR/ipython/profile_default/startup/00-autoreload.py" \
+        "$HOME/.ipython/profile_default/startup/00-autoreload.py" \
+        "ipython autoreload"
+
+    # --- ptpython / ptipython ---
+    log_step "Configuring ptpython"
+    safe_link \
+        "$PROJECT_DIR/ptpython/config.py" \
+        "$HOME/.config/ptpython/config.py" \
+        "ptpython config"
+
     # --- Fish ---
     log_step "Configuring fish"
     safe_link "$PROJECT_DIR/fish/config.fish" "$HOME/.config/fish/config.fish" "fish/config.fish"
