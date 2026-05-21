@@ -94,10 +94,6 @@ function fish_prompt --description 'Write out the prompt'
     set_color $color_cwd
     echo -n (prompt_pwd)
     set_color normal
-    if test -n "$host"
-        set_color brblack
-        echo -n " "
-    end
 
     printf '%s ' (__fish_vcs_prompt)
 
