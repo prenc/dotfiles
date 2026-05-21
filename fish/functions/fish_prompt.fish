@@ -1,5 +1,14 @@
 function fish_prompt --description 'Write out the prompt'
 	set -l last_status $status
+    set -l machine_role local
+    if test -f ~/.config/dotfiles/machine-role
+        set machine_role (string trim (cat ~/.config/dotfiles/machine-role))
+    end
+
+    set -l host
+    if test "$machine_role" = server
+        set host (prompt_hostname)
+    end
 
     if not set -q __fish_git_prompt_show_informative_status
         set -g __fish_git_prompt_show_informative_status 1
@@ -77,9 +86,18 @@ function fish_prompt --description 'Write out the prompt'
     end
 
     # PWD
+    if test -n "$host"
+        set_color brblack
+        echo -n "$host:"
+        set_color normal
+    end
     set_color $color_cwd
     echo -n (prompt_pwd)
     set_color normal
+    if test -n "$host"
+        set_color brblack
+        echo -n " "
+    end
 
     printf '%s ' (__fish_vcs_prompt)
 

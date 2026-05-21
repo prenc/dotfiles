@@ -174,20 +174,20 @@ bindsym $mod+Shift+e move container to workspace $ws7; workspace $ws7
 bindsym $mod+Shift+r move container to workspace $ws8; workspace $ws8
 
 # Open applications on specific workspaces
-assign [class="firefox"] $ws1
-assign [class="zoom"] $ws1
+assign [class="(?i)firefox"] $ws1
+assign [class="(?i)zoom"] $ws1
 
-assign [class="Thunderbird"] $ws4
-assign [class="Spotify"] $ws5
+assign [class="(?i)thunderbird"] $ws4
+assign [class="(?i)spotify"] $ws5
 
-assign [class="teams"] $ws7
-assign [class="Slack"] $ws8
+assign [class="(?i)teams"] $ws7
+assign [class="(?i)slack"] $ws8
 
 # Open specific applications in floating mode
 for_window [title="alsamixer"] floating enable border pixel 1
 for_window [class="calamares"] floating enable border normal
 for_window [class="Clipgrab"] floating enable
-for_window [title="File Transfer*"] floating enable
+for_window [title="File Transfer.*"] floating enable
 for_window [class="fpakman"] floating enable
 for_window [class="Galculator"] floating enable border pixel 1
 for_window [class="GParted"] floating enable border normal
@@ -211,12 +211,12 @@ for_window [class="Xfburn"] floating enable
 for_window [class="^jetbrains" title="^Welcome"] floating enable
 
 # Chromium, testing...
-for_window [class="Chromium"] move scratchpad
+for_window [class="(?i)chromium"] move scratchpad
 
 # Zoom
-for_window [class="zoom"] floating enable sticky
-for_window [class="zoom" title="Zoom Meeting"] floating disable
-for_window [class="zoom" title="Zoom - [a-zA-Z]+ Account"] floating disable
+for_window [class="(?i)zoom"] floating enable sticky
+for_window [class="(?i)zoom" title="Zoom Meeting"] floating disable
+for_window [class="(?i)zoom" title="Zoom - [a-zA-Z]+ Account"] floating disable
 
 # switch to workspace with urgent window automatically
 for_window [urgent=latest] focus
@@ -273,6 +273,7 @@ mode "resize" {
 
 # Lock screen
 bindsym $mod+9 exec --no-startup-id blurlock
+exec --no-startup-id xss-lock --transfer-sleep-lock -- blurlock
 
 # Autostart applications
 exec --no-startup-id /usr/lib/polkit-gnome/polkit-gnome-authentication-agent-1

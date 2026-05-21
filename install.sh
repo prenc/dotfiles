@@ -4,30 +4,64 @@ set -euo pipefail
 # ============================================================================
 # Dotfiles Installer
 # Supports: macOS, Linux
-# Usage: ./install.sh [--dry-run] [--no-color] [--skip-packages]
+# Usage: ./install.sh --machine-role [local|server] [--dry-run] [--no-color] [--skip-packages]
 # ============================================================================
 
 PROJECT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 DRY_RUN=false
 NO_COLOR=false
 SKIP_PACKAGES=false
+MACHINE_ROLE=""
 BACKUP_DIR="$HOME/.dotfiles_backup/$(date +%Y%m%d_%H%M%S)"
 
 # Parse arguments
-for arg in "$@"; do
-    case $arg in
-        --dry-run) DRY_RUN=true ;;
-        --no-color) NO_COLOR=true ;;
-        --skip-packages) SKIP_PACKAGES=true ;;
+while [[ $# -gt 0 ]]; do
+    case "$1" in
+        --machine-role)
+            MACHINE_ROLE="${2:-}"
+            shift 2
+            ;;
+        --dry-run)
+            DRY_RUN=true
+            shift
+            ;;
+        --no-color)
+            NO_COLOR=true
+            shift
+            ;;
+        --skip-packages)
+            SKIP_PACKAGES=true
+            shift
+            ;;
         --help|-h)
-            echo "Usage: $0 [--dry-run] [--no-color] [--skip-packages]"
+            echo "Usage: $0 --machine-role [local|server] [--dry-run] [--no-color] [--skip-packages]"
+            echo "  --machine-role  Required machine role: local or server"
             echo "  --dry-run       Show what would be done without making changes"
             echo "  --no-color      Disable colored output"
             echo "  --skip-packages Skip installing system packages"
             exit 0
             ;;
+        *)
+            echo "Unknown argument: $1" >&2
+            echo "Run with --help for usage." >&2
+            exit 1
+            ;;
     esac
 done
+
+if [[ -z "$MACHINE_ROLE" ]]; then
+    echo "Missing required argument: --machine-role [local|server]" >&2
+    exit 1
+fi
+
+case "$MACHINE_ROLE" in
+    local|server) ;;
+    *)
+        echo "Invalid machine role: $MACHINE_ROLE" >&2
+        echo "Expected one of: local, server" >&2
+        exit 1
+        ;;
+esac
 
 # ============================================================================
 # Colors and formatting
@@ -60,9 +94,16 @@ main() {
     echo -e "${BOLD}║        Dotfiles Installation           ║${NC}"
     echo -e "${BOLD}╚════════════════════════════════════════╝${NC}"
     echo -e "${DIM}OS: $os | Dir: $PROJECT_DIR${NC}"
+    echo -e "${DIM}Role: $MACHINE_ROLE${NC}"
     [[ "$DRY_RUN" == true ]] && echo -e "${YELLOW}(DRY RUN MODE)${NC}"
     [[ "$SKIP_PACKAGES" == true ]] && echo -e "${DIM}(skipping packages)${NC}"
     echo
+
+    log_step "Recording machine role: $MACHINE_ROLE"
+    if [[ "$DRY_RUN" == false ]]; then
+        mkdir -p "$HOME/.config/dotfiles"
+        printf '%s\n' "$MACHINE_ROLE" > "$HOME/.config/dotfiles/machine-role"
+    fi
 
     # --- Install packages ---
     if [[ "$SKIP_PACKAGES" == false ]]; then
@@ -113,10 +154,21 @@ main() {
 
     # --- i3 (Linux only) ---
     log_step "Configuring i3"
-    if [[ "$os" == "linux" ]]; then
+    if [[ "$os" == "linux" ]] && [[ "$MACHINE_ROLE" == local ]]; then
         safe_link "$PROJECT_DIR/i3config" "$HOME/.config/i3/config" "i3config"
+        safe_link "$PROJECT_DIR/i3status/config" "$HOME/.config/i3status/config" "i3status config"
     else
-        log_info "Skipping i3 (not on Linux)"
+        if [[ "$MACHINE_ROLE" == server ]]; then
+            if [[ "$DRY_RUN" == true ]]; then
+                log_dry "remove $HOME/.config/i3/config"
+                log_dry "remove $HOME/.config/i3status/config"
+            else
+                rm -f "$HOME/.config/i3/config" "$HOME/.config/i3status/config"
+            fi
+            log_info "Skipping i3 (server role)"
+        else
+            log_info "Skipping i3 (not on Linux)"
+        fi
     fi
 
     # --- Done ---
