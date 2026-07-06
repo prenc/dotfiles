@@ -15,11 +15,26 @@ alias dw='cd ~/Downloads'
 alias va='source .venv/bin/activate.fish'
 
 set -gx EDITOR vim
-set -gx BROWSER brave
 set -gx PAGER less
+
+set -l BROWSER_COMMAND brave
+if command -q "$BROWSER_COMMAND"
+    set -gx BROWSER "$BROWSER_COMMAND"
+end
 
 if command -q direnv
     direnv hook fish | source
+end
+
+set -l MACHINE_ROLE local
+if test -f ~/.config/dotfiles/machine-role
+    set MACHINE_ROLE (string trim (cat ~/.config/dotfiles/machine-role))
+end
+
+if test "$MACHINE_ROLE" = server
+    if command -q squeue
+        alias squeue="squeue --format '%.18i;%.5u;%.2t;%.10M;%.10l;%.5D;%.16R;%C;%b;%j' | sed 's/^[ \t]*//' | column -s';' -t"
+    end
 end
 
 function fish_user_key_bindings
