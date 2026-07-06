@@ -18,6 +18,10 @@ set -gx EDITOR vim
 set -gx BROWSER brave
 set -gx PAGER less
 
+if command -q direnv
+    direnv hook fish | source
+end
+
 function fish_user_key_bindings
     for mode in insert default visual
         bind -M $mode \cf forward-char

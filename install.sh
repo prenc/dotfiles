@@ -157,6 +157,19 @@ main() {
     if [[ "$os" == "linux" ]] && [[ "$MACHINE_ROLE" == local ]]; then
         safe_link "$PROJECT_DIR/i3config" "$HOME/.config/i3/config" "i3config"
         safe_link "$PROJECT_DIR/i3status/config" "$HOME/.config/i3status/config" "i3status config"
+        safe_link "$PROJECT_DIR/Xkbmap" "$HOME/.Xkbmap" "Xkbmap"
+        if [[ "$DRY_RUN" == true ]]; then
+            log_dry "apply Xkbmap with setxkbmap"
+        elif command -v setxkbmap >/dev/null 2>&1 && [[ -n "${DISPLAY:-}" ]]; then
+            if xargs setxkbmap < "$HOME/.Xkbmap"; then
+                log_info "Applied Xkbmap"
+            else
+                log_warn "Failed to apply Xkbmap"
+            fi
+        else
+            log_warn "Skipping Xkbmap apply (setxkbmap or DISPLAY unavailable)"
+        fi
+        safe_link "$PROJECT_DIR/autorandr/settings.ini" "$HOME/.config/autorandr/settings.ini" "autorandr settings"
     else
         if [[ "$MACHINE_ROLE" == server ]]; then
             if [[ "$DRY_RUN" == true ]]; then

@@ -1,0 +1,207 @@
+#!/usr/bin/env bash
+set -u
+
+SESSION_USER=${AUTORANDR_SMART_USER:-prenc}
+SESSION_DISPLAY=${AUTORANDR_SMART_DISPLAY:-:0}
+SESSION_XAUTHORITY=${AUTORANDR_SMART_XAUTHORITY:-/home/prenc/.Xauthority}
+
+log() {
+    logger -t autorandr-smart "$*"
+    printf '%s\n' "$*" >&2
+}
+
+line_for_output() {
+    printf '%s\n' "$xrandr_query" | awk -v output="$1" '$1 == output {print; exit}'
+}
+
+output_is_active() {
+    output_geometry "$1" >/dev/null
+}
+
+output_is_primary() {
+    local line
+    line=$(line_for_output "$1")
+    [[ "$line" == *" primary "* ]]
+}
+
+output_geometry() {
+    local line
+    line=$(line_for_output "$1")
+
+    if [[ "$line" =~ ([0-9]+)x([0-9]+)\+(-?[0-9]+)\+(-?[0-9]+) ]]; then
+        printf '%s %s %s %s\n' \
+            "${BASH_REMATCH[1]}" \
+            "${BASH_REMATCH[2]}" \
+            "${BASH_REMATCH[3]}" \
+            "${BASH_REMATCH[4]}"
+        return 0
+    fi
+
+    return 1
+}
+
+profiles_overlap() {
+    local detected_profiles="$1"
+    local current_profiles="$2"
+    local detected_profile
+
+    while IFS= read -r detected_profile; do
+        [ -z "$detected_profile" ] && continue
+        if printf '%s\n' "$current_profiles" | grep -Fxq "$detected_profile"; then
+            return 0
+        fi
+    done <<< "$detected_profiles"
+
+    return 1
+}
+
+fallback_already_applied() {
+    local expected_x=0
+    local height
+    local output
+    local width
+    local x
+    local y
+
+    if [ "${#external_outputs[@]}" -gt 0 ]; then
+        output_is_primary "${external_outputs[0]}" || return 1
+
+        for output in "${external_outputs[@]}"; do
+            read -r width height x y < <(output_geometry "$output") || return 1
+            [ "$x" -eq "$expected_x" ] || return 1
+            [ "$y" -eq 0 ] || return 1
+            expected_x=$((expected_x + width))
+        done
+
+        for output in "${internal_outputs[@]}"; do
+            if output_is_active "$output"; then
+                return 1
+            fi
+        done
+
+        return 0
+    fi
+
+    if [ "${#internal_outputs[@]}" -gt 0 ]; then
+        read -r width height x y < <(output_geometry "${internal_outputs[0]}") || return 1
+        output_is_primary "${internal_outputs[0]}" || return 1
+        [ "$x" -eq 0 ] || return 1
+        [ "$y" -eq 0 ] || return 1
+
+        for output in "${internal_outputs[@]:1}"; do
+            if output_is_active "$output"; then
+                return 1
+            fi
+        done
+
+        return 0
+    fi
+
+    return 1
+}
+
+run_as_session_user() {
+    local uid
+    uid=$(id -u "$SESSION_USER")
+    exec runuser -u "$SESSION_USER" -- env \
+        DISPLAY="$SESSION_DISPLAY" \
+        XAUTHORITY="$SESSION_XAUTHORITY" \
+        XDG_RUNTIME_DIR="/run/user/$uid" \
+        /usr/local/bin/autorandr-smart-apply "$@"
+}
+
+if [ "${EUID:-$(id -u)}" -eq 0 ] && [ -z "${DISPLAY:-}" ]; then
+    run_as_session_user "$@"
+fi
+
+if ! command -v xrandr >/dev/null 2>&1; then
+    log "xrandr is not available"
+    exit 1
+fi
+
+if ! xrandr_query=$(xrandr --query 2>/dev/null); then
+    log "cannot query X display ${DISPLAY:-unset}"
+    exit 1
+fi
+
+mapfile -t connected_outputs < <(printf '%s\n' "$xrandr_query" | awk '$2 == "connected" {print $1}')
+
+internal_outputs=()
+external_outputs=()
+
+for output in "${connected_outputs[@]}"; do
+    case "$output" in
+        eDP*|LVDS*) internal_outputs+=("$output") ;;
+        *) external_outputs+=("$output") ;;
+    esac
+done
+
+if fallback_already_applied; then
+    if [ "${#external_outputs[@]}" -gt 0 ]; then
+        log "fallback already applied: external extended layout on ${external_outputs[*]}"
+    else
+        log "fallback already applied: laptop-only layout on ${internal_outputs[0]}"
+    fi
+    exit 0
+fi
+
+if command -v autorandr >/dev/null 2>&1; then
+    detected=$(autorandr --detected 2>/dev/null || true)
+    if [ -n "$detected" ]; then
+        log "autorandr detected profile(s): $detected"
+        current=$(autorandr --current 2>/dev/null || true)
+        if [ -n "$current" ] && profiles_overlap "$detected" "$current"; then
+            log "autorandr profile already current: $current"
+            exit 0
+        fi
+        log "autorandr profile not current; using fallback without applying autorandr"
+    else
+        log "no autorandr profile detected; using fallback"
+    fi
+fi
+
+if [ "${#external_outputs[@]}" -gt 0 ]; then
+    if fallback_already_applied; then
+        log "fallback already applied: external extended layout on ${external_outputs[*]}"
+        exit 0
+    fi
+
+    args=()
+    previous=
+    for output in "${external_outputs[@]}"; do
+        if [ -z "$previous" ]; then
+            args+=(--output "$output" --auto --primary --pos 0x0)
+        else
+            args+=(--output "$output" --auto --right-of "$previous")
+        fi
+        previous="$output"
+    done
+    for output in "${internal_outputs[@]}"; do
+        args+=(--output "$output" --off)
+    done
+    log "fallback: external extended layout on ${external_outputs[*]}"
+    if xrandr "${args[@]}"; then
+        exit 10
+    fi
+    exit 1
+fi
+
+if [ "${#internal_outputs[@]}" -gt 0 ]; then
+    if fallback_already_applied; then
+        log "fallback already applied: laptop-only layout on ${internal_outputs[0]}"
+        exit 0
+    fi
+
+    args=(--output "${internal_outputs[0]}" --auto --primary --pos 0x0)
+    for output in "${internal_outputs[@]:1}"; do
+        args+=(--output "$output" --off)
+    done
+    log "fallback: laptop-only layout on ${internal_outputs[0]}"
+    if xrandr "${args[@]}"; then
+        exit 10
+    fi
+    exit 1
+fi
+
+log "no connected internal or external display found; leaving layout unchanged"
+exit 1

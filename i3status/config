@@ -7,29 +7,35 @@ general {
 }
 
 order += "battery all"
+order += "cpu_usage"
 order += "disk /"
-order += "load"
 order += "memory"
 order += "tztime local"
 
 battery all {
-        format = "%status %percentage %remaining"
+        format = "󰁹 %percentage (%status) %remaining"
+        format_down = "󰂎 n/a"
+        status_chr = "charging"
+        status_bat = "discharging"
+        status_unk = "unknown"
+        status_full = "full"
+        status_idle = "idle"
+}
+
+cpu_usage {
+        format = "󰻠 %usage"
 }
 
 disk "/" {
-        format = "%avail"
-}
-
-load {
-        format = "%1min"
+        format = "󰋊 %avail"
 }
 
 memory {
-        format = "%used | %available"
+        format = "󰍛 %used / %available"
         threshold_degraded = "1G"
-        format_degraded = "MEMORY < %available"
+        format_degraded = "󰍛 low: %available"
 }
 
 tztime local {
-        format = "%Y-%m-%d %H:%M:%S"
+        format = "󰥔 %Y-%m-%d %H:%M:%S"
 }

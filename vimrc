@@ -1,17 +1,20 @@
-" Plugins
+" Plugins ---------------------------------------------------------------------
+
 call plug#begin('~/.vim/bundle')
 
+" AI
 Plug 'github/copilot.vim'
 
 " Git
 Plug 'tpope/vim-fugitive'
 Plug 'airblade/vim-gitgutter'
 
+" Defaults and motions
 Plug 'tpope/vim-sensible'
 Plug 'tpope/vim-repeat'
 Plug 'tpope/vim-unimpaired'
 
-" Plugins also used in IdeaVim
+" Text objects and editing
 Plug 'vim-scripts/argtextobj.vim'
 Plug 'tpope/vim-commentary'
 Plug 'easymotion/vim-easymotion'
@@ -26,39 +29,30 @@ Plug 'justinmk/vim-sneak'
 Plug 'tpope/vim-surround'
 Plug 'kana/vim-textobj-entire'
 
-" Nerdtree, also used in IdeaVim
+" Navigation
 Plug 'preservim/nerdtree'
-" Plug 'tiagofumo/vim-nerdtree-syntax-highlight'
-
-" Other
 Plug 'junegunn/vim-peekaboo'
-Plug 'ap/vim-css-color'
-
-Plug 'sickill/vim-pasta'
-Plug 'Raimondi/delimitMate'
-Plug 'Yggdroot/indentLine'
 Plug 'jpalardy/vim-slime'
-Plug 'kana/vim-textobj-user'
 
 " Theme
 Plug 'vim-airline/vim-airline'
 Plug 'vim-airline/vim-airline-themes'
 Plug 'morhetz/gruvbox'
+Plug 'ap/vim-css-color'
+Plug 'Yggdroot/indentLine'
 
-" Python
-Plug 'klen/python-mode'
-Plug 'psf/black'
-
-" fzf
+" FZF
 Plug 'junegunn/fzf', { 'do': { -> fzf#install() } }
 Plug 'junegunn/fzf.vim'
 
-" Julia
-" Plug 'JuliaEditorSupport/julia-vim'
-" Plug 'autozimu/LanguageClient-neovim', {'branch': 'next', 'do': 'bash install.sh'}
-" Plug 'kdheepak/JuliaFormatter.vim'
+" Other
+Plug 'sickill/vim-pasta'
+Plug 'Raimondi/delimitMate'
+Plug 'kana/vim-textobj-user'
 
 call plug#end()
+
+" Defaults --------------------------------------------------------------------
 
 set nocompatible
 
@@ -73,33 +67,36 @@ set shiftwidth=4
 set tabstop=4
 
 set ruler
-" set hidden
 
 set path+=**
 set wildmenu
 set nobackup
 set noswapfile
+set undofile
+set undodir=~/.vim/undo//
 set bg=dark
 set autochdir
 
 set updatetime=300
-
-let g:python_highlight_all = 1
+set ignorecase
+set smartcase
+set incsearch
+set scrolloff=5
+set sidescrolloff=8
+set signcolumn=yes
 
 syntax on
 filetype plugin indent on
 
-colorscheme gruvbox
-
-" Spell check
-" set spell
 set spelllang=en
 hi SpellBad cterm=underline
 
-" Buffers
 au FileChangedShell * checktime
 
-" Airline
+" Theme -----------------------------------------------------------------------
+
+colorscheme gruvbox
+
 let g:airline#extensions#tabline#enabled = 1
 let g:airline#extensions#tabline#formatter = 'unique_tail_improved'
 let g:airline_powerline_fonts = 1
@@ -108,102 +105,67 @@ let g:airline_theme = 'gruvbox'
 let g:gruvbox_contrast_dark = 'medium'
 let g:gruvbox_bold = 1
 
-" Black
-let g:black_linelength = 79
-"autocmd BufWritePre *.py execute ':Black'
-nnoremap <F9> :Black<CR>
+" Plugin Settings -------------------------------------------------------------
 
-" Pymode
-let g:pymode_rope_complete_on_dot = 0
-let g:pymode_folding = 0
-
-" NERDTree
-nnoremap <C-m> :NERDTreeToggle<CR>
+nnoremap <leader>n :NERDTreeToggle<CR>
 let g:NERDTreeDirArrowExpandable = '▸'
 let g:NERDTreeDirArrowCollapsible = '▾'
-let NERDTreeShowLineNumbers=1
-let NERDTreeShowHidden=1
-let NERDTreeMinimalUI=1
+let NERDTreeShowLineNumbers = 1
+let NERDTreeShowHidden = 1
+let NERDTreeMinimalUI = 1
 
-" FZF
 let g:fzf_buffers_jump = 1
 let g:fzf_commits_log_options = '--graph --color=always --format="%C(auto)%h%d %s %C(black)%C(bold)%cr"'
-let g:fzf_tags_command = 'ctags -R'
 
-" AWESOME KEYBINDINGS
-"
+let g:highlightedyank_highlight_duration = 100
+
+let g:EasyMotion_do_mapping = 0
+let g:EasyMotion_smartcase = 1
+
+" Send code snippets to the current tmux window's second pane.
+let g:slime_target = "tmux"
+let g:slime_paste_file = tempname()
+let g:slime_default_config = {"socket_name": get(split($TMUX, ","), 0), "target_pane": ":.1"}
+
+" Keep Visual Multi on familiar Ctrl-n/Ctrl-a multi-cursor bindings.
+let g:VM_maps = {}
+let g:VM_maps['Find Under']         = '<C-n>'
+let g:VM_maps['Find Subword Under'] = '<C-n>'
+let g:VM_maps['Select All']         = '<C-a>'
+
+" Keybindings -----------------------------------------------------------------
 
 let mapleader = ' '
 
-" Disable arrow keys in Normal mode
 no <Up> <Nop>
 no <Down> <Nop>
 no <Left> <Nop>
 no <Right> <Nop>
 no <Space> <Nop>
 
-" Disable arrow keys in Insert mode
 ino <Up> <Nop>
 ino <Down> <Nop>
 ino <Left> <Nop>
 ino <Right> <Nop>
 
-" Faster splits
 set splitbelow splitright
-nnoremap <C-J> <C-W><C-J>
-nnoremap <C-K> <C-W><C-K>
-nnoremap <C-L> <C-W><C-L>
-nnoremap <C-H> <C-W><C-H>
 
-" Fzf
+" Search tracked files in the current Git repository.
 nnoremap <C-p> :GFiles<CR>
+" Search files from the current working directory.
 nnoremap <leader>f :Files<CR>
+" Switch between open buffers.
 nnoremap <leader>b :Buffers<CR>
+" Search file contents with The Silver Searcher.
 nnoremap <leader>a :Ag<CR>
 
-" Faster saving
-nnoremap <C-S> :w<CR>
-
-" Git
 nnoremap <leader>gs :Git <CR>
 nnoremap <leader>gc :Git commit<CR>
 nnoremap <leader>gb :Git blame<CR>
 nnoremap <leader>gd :Git diff<CR>
+" During a merge, take the left-side diff hunk.
 nnoremap <leader>gl :diffget //2<CR>
+" During a merge, take the right-side diff hunk.
 nnoremap <leader>gr :diffget //3<CR>
 
-" Remove all trailing whitespace by pressing F5
-nnoremap <silent> <F5> :let _s=@/<Bar>:%s/\s\+$//e<Bar>:let @/=_s<Bar><CR>
-
-" Julia
-nnoremap <leader>jf :JuliaFormatterFormat<CR>
-vnoremap <leader>jf :JuliaFormatterFormat<CR>
-
-" Git Gutter
 noremap <silent> <leader>gg :GitGutterToggle<CR>
-
-" Highlight yank
-let g:highlightedyank_highlight_duration = 100
-
-"Easy motion
-let g:EasyMotion_do_mapping = 0
-" nmap <leader>s <Plug>(easymotion-overwin-f)
-" nmap <leader>s <Plug>(easymotion-overwin-f2)
-let g:EasyMotion_smartcase = 1
-" map <Leader>j <Plug>(easymotion-j)
-" map <Leader>k <Plug>(easymotion-k)
-
-"Slime
-let g:slime_target = "tmux"
-let g:slime_paste_file = tempname()
-let g:slime_default_config = {"socket_name": get(split($TMUX, ","), 0), "target_pane": ":.1"}
-
-" Julia vim
-let g:latex_to_unicode_tab = 0
-
-" vim-visual-multi (multi-cursor)
-let g:VM_maps = {}
-let g:VM_maps['Find Under']         = '<C-n>'
-let g:VM_maps['Find Subword Under'] = '<C-n>'
-let g:VM_maps['Select All']         = '<C-a>'
-let g:VM_maps['Skip Region']        = '<C-x>'

@@ -1,0 +1,19 @@
+#!/usr/bin/env bash
+set -u
+
+case "${1:-}/${2:-}" in
+    post/*)
+        previous=0
+        for delay in 0 2 5; do
+            sleep "$((delay - previous))"
+            /usr/local/bin/autorandr-smart-apply
+            status=$?
+            if [ "$status" -eq 0 ]; then
+                break
+            fi
+            previous="$delay"
+        done
+        ;;
+esac
+
+exit 0
