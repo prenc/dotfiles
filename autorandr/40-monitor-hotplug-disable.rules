@@ -1,0 +1,2 @@
+# Override autorandr's package-provided monitor hotplug rule by replacing it
+# with an empty same-named rule file in /etc.

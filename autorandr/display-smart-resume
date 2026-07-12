@@ -6,7 +6,7 @@ case "${1:-}/${2:-}" in
         previous=0
         for delay in 0 2 5; do
             sleep "$((delay - previous))"
-            /usr/local/bin/autorandr-smart-apply
+            /usr/local/bin/display-smart-apply
             status=$?
             if [ "$status" -eq 0 ]; then
                 break

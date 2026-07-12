@@ -1,12 +1,12 @@
 #!/usr/bin/env bash
 set -u
 
-SESSION_USER=${AUTORANDR_SMART_USER:-prenc}
-SESSION_DISPLAY=${AUTORANDR_SMART_DISPLAY:-:0}
-SESSION_XAUTHORITY=${AUTORANDR_SMART_XAUTHORITY:-/home/prenc/.Xauthority}
+SESSION_USER=${DISPLAY_SMART_USER:-${AUTORANDR_SMART_USER:-prenc}}
+SESSION_DISPLAY=${DISPLAY_SMART_DISPLAY:-${AUTORANDR_SMART_DISPLAY:-:0}}
+SESSION_XAUTHORITY=${DISPLAY_SMART_XAUTHORITY:-${AUTORANDR_SMART_XAUTHORITY:-/home/prenc/.Xauthority}}
 
 log() {
-    logger -t autorandr-smart "$*"
+    logger -t display-smart "$*"
     printf '%s\n' "$*" >&2
 }
 
@@ -36,21 +36,6 @@ output_geometry() {
             "${BASH_REMATCH[4]}"
         return 0
     fi
-
-    return 1
-}
-
-profiles_overlap() {
-    local detected_profiles="$1"
-    local current_profiles="$2"
-    local detected_profile
-
-    while IFS= read -r detected_profile; do
-        [ -z "$detected_profile" ] && continue
-        if printf '%s\n' "$current_profiles" | grep -Fxq "$detected_profile"; then
-            return 0
-        fi
-    done <<< "$detected_profiles"
 
     return 1
 }
@@ -107,7 +92,7 @@ run_as_session_user() {
         DISPLAY="$SESSION_DISPLAY" \
         XAUTHORITY="$SESSION_XAUTHORITY" \
         XDG_RUNTIME_DIR="/run/user/$uid" \
-        /usr/local/bin/autorandr-smart-apply "$@"
+        /usr/local/bin/display-smart-apply "$@"
 }
 
 if [ "${EUID:-$(id -u)}" -eq 0 ] && [ -z "${DISPLAY:-}" ]; then
@@ -143,21 +128,6 @@ if fallback_already_applied; then
         log "fallback already applied: laptop-only layout on ${internal_outputs[0]}"
     fi
     exit 0
-fi
-
-if command -v autorandr >/dev/null 2>&1; then
-    detected=$(autorandr --detected 2>/dev/null || true)
-    if [ -n "$detected" ]; then
-        log "autorandr detected profile(s): $detected"
-        current=$(autorandr --current 2>/dev/null || true)
-        if [ -n "$current" ] && profiles_overlap "$detected" "$current"; then
-            log "autorandr profile already current: $current"
-            exit 0
-        fi
-        log "autorandr profile not current; using fallback without applying autorandr"
-    else
-        log "no autorandr profile detected; using fallback"
-    fi
 fi
 
 if [ "${#external_outputs[@]}" -gt 0 ]; then

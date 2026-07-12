@@ -1,0 +1,9 @@
+[Unit]
+Description=Display smart hotplug handler
+StartLimitIntervalSec=30
+StartLimitBurst=20
+
+[Service]
+Type=oneshot
+ExecStart=/usr/local/bin/display-smart-hotplug
+SuccessExitStatus=10

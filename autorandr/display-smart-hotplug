@@ -1,0 +1,15 @@
+#!/usr/bin/env bash
+set -u
+
+previous=0
+for delay in 0 2 5; do
+    sleep "$((delay - previous))"
+    /usr/local/bin/display-smart-apply
+    status=$?
+    if [ "$status" -eq 0 ]; then
+        exit 0
+    fi
+    previous="$delay"
+done
+
+exit 0

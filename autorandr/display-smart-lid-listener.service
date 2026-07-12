@@ -1,0 +1,12 @@
+[Unit]
+Description=Display smart lid listener
+
+[Service]
+Type=simple
+ExecStart=sh -c "stdbuf -oL libinput debug-events | grep -E --line-buffered '^[[:space:]-]+event[0-9]+[[:space:]]+SWITCH_TOGGLE[[:space:]]' | while read line; do /usr/local/bin/display-smart-apply; done"
+Restart=always
+RestartSec=30
+SyslogIdentifier=display-smart-lid
+
+[Install]
+WantedBy=multi-user.target
