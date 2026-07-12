@@ -76,8 +76,9 @@ set undofile
 set undodir=~/.vim/undo//
 set bg=dark
 set autochdir
+set autoread
 
-set updatetime=300
+set updatetime=1000
 set ignorecase
 set smartcase
 set incsearch
@@ -91,7 +92,10 @@ filetype plugin indent on
 set spelllang=en
 hi SpellBad cterm=underline
 
-au FileChangedShell * checktime
+augroup external_file_changes
+    autocmd!
+    autocmd FocusGained,BufEnter,CursorHold,CursorHoldI * silent! checktime
+augroup END
 
 " Theme -----------------------------------------------------------------------
 
@@ -133,6 +137,18 @@ let g:VM_maps['Find Under']         = '<C-n>'
 let g:VM_maps['Find Subword Under'] = '<C-n>'
 let g:VM_maps['Select All']         = '<C-a>'
 
+function! s:ProjectFiles() abort
+    let l:roots = systemlist('git rev-parse --show-toplevel')
+    if v:shell_error || empty(l:roots)
+        Files
+        return
+    endif
+
+    execute 'Files' fnameescape(l:roots[0])
+endfunction
+
+command! ProjectFiles call s:ProjectFiles()
+
 " Keybindings -----------------------------------------------------------------
 
 let mapleader = ' '
@@ -152,8 +168,8 @@ set splitbelow splitright
 
 " Search tracked files in the current Git repository.
 nnoremap <C-p> :GFiles<CR>
-" Search files from the current working directory.
-nnoremap <leader>f :Files<CR>
+" Search files from the current Git repository root.
+nnoremap <leader>f :ProjectFiles<CR>
 " Switch between open buffers.
 nnoremap <leader>b :Buffers<CR>
 " Search file contents with The Silver Searcher.
