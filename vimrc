@@ -148,6 +148,7 @@ function! s:ProjectFiles() abort
 endfunction
 
 command! ProjectFiles call s:ProjectFiles()
+command! CopyView %write !less -R
 
 " Keybindings -----------------------------------------------------------------
 
@@ -170,6 +171,8 @@ set splitbelow splitright
 nnoremap <C-p> :GFiles<CR>
 " Search files from the current Git repository root.
 nnoremap <leader>f :ProjectFiles<CR>
+" View the current buffer in a terminal pager for easy copying.
+nnoremap <leader>p :CopyView<CR>
 " Switch between open buffers.
 nnoremap <leader>b :Buffers<CR>
 " Search file contents with The Silver Searcher.
