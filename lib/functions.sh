@@ -214,6 +214,16 @@ install_packages() {
 
     log_step "Installing dependencies"
 
+    if [[ "${NO_SUDO:-false}" == true ]]; then
+        log_warn "Skipping system packages because --no-sudo was specified"
+        return 0
+    fi
+
+    if [[ "$pm" != "brew" ]] && [[ "${EUID:-$(id -u)}" -ne 0 ]] && ! command_exists sudo; then
+        log_error "sudo is unavailable. If you do not have sudo, rerun this script with --no-sudo"
+        return 1
+    fi
+
     if [[ "$pm" == "none" ]]; then
         if [[ "$os" == "macos" ]]; then
             log_warn "Homebrew not found. Install it from https://brew.sh"

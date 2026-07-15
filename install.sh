@@ -4,13 +4,14 @@ set -euo pipefail
 # ============================================================================
 # Dotfiles Installer
 # Supports: macOS, Linux
-# Usage: ./install.sh [--machine-role local|server] [--dry-run] [--no-color] [--skip-packages]
+# Usage: ./install.sh [--machine-role local|server] [--dry-run] [--no-color] [--skip-packages] [--no-sudo]
 # ============================================================================
 
 PROJECT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 DRY_RUN=false
 NO_COLOR=false
 SKIP_PACKAGES=false
+NO_SUDO=false
 MACHINE_ROLE=""
 BACKUP_DIR="$HOME/.dotfiles_backup/$(date +%Y%m%d_%H%M%S)"
 ROLE_FILE="$HOME/.config/dotfiles/machine-role"
@@ -34,12 +35,17 @@ while [[ $# -gt 0 ]]; do
             SKIP_PACKAGES=true
             shift
             ;;
+        --no-sudo)
+            NO_SUDO=true
+            shift
+            ;;
         --help|-h)
-            echo "Usage: $0 [--machine-role local|server] [--dry-run] [--no-color] [--skip-packages]"
+            echo "Usage: $0 [--machine-role local|server] [--dry-run] [--no-color] [--skip-packages] [--no-sudo]"
             echo "  --machine-role  Machine role; defaults to the saved role when available"
             echo "  --dry-run       Show what would be done without making changes"
             echo "  --no-color      Disable colored output"
             echo "  --skip-packages Skip installing system packages"
+            echo "  --no-sudo       Skip system packages when sudo is unavailable"
             exit 0
             ;;
         *)
@@ -102,7 +108,13 @@ main() {
     echo -e "${DIM}Role: $MACHINE_ROLE${NC}"
     [[ "$DRY_RUN" == true ]] && echo -e "${YELLOW}(DRY RUN MODE)${NC}"
     [[ "$SKIP_PACKAGES" == true ]] && echo -e "${DIM}(skipping packages)${NC}"
+    [[ "$NO_SUDO" == true ]] && echo -e "${YELLOW}(no sudo: skipping system packages)${NC}"
     echo
+
+    if [[ "$NO_SUDO" == true ]]; then
+        echo -e "${YELLOW}No sudo mode enabled. If you do not have sudo, run this script with --no-sudo.${NC}"
+        echo
+    fi
 
     log_step "Recording machine role: $MACHINE_ROLE"
     if [[ "$DRY_RUN" == false ]]; then
