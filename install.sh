@@ -124,7 +124,7 @@ main() {
 
     # --- Install packages ---
     if [[ "$SKIP_PACKAGES" == false ]]; then
-        install_packages "$os"
+        install_packages "$os" "$MACHINE_ROLE"
     fi
 
     # --- Tmux ---

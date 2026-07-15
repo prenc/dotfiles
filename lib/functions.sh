@@ -211,9 +211,15 @@ install_package() {
 
 install_packages() {
     local os="$1"
+    local machine_role="${2:-}"
     local pm=$(detect_package_manager "$os")
     local core_packages=(git vim tmux fish alacritty ripgrep)
     local core_commands=(git vim tmux fish alacritty rg)
+
+    if [[ "$os" == "linux" && "$machine_role" == "local" ]]; then
+        core_packages+=(brightnessctl)
+        core_commands+=(brightnessctl)
+    fi
 
     log_step "Installing dependencies"
 

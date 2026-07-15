@@ -21,8 +21,8 @@ bindsym $mod+c kill
 exec_always --no-startup-id sh -c 'pgrep -x pasystray >/dev/null || pasystray --volume-inc=5 --notify=systray_action --key-grabbing'
 bindsym $mod+Ctrl+m exec pavucontrol
 
-bindsym XF86MonBrightnessUp exec "xbacklight -inc 10; notify-send 'brightness up'"
-bindsym XF86MonBrightnessDown exec "xbacklight -dec 10; notify-send 'brightness down'"
+bindsym XF86MonBrightnessUp exec --no-startup-id "brightnessctl set 10%+ && notify-send 'brightness up'"
+bindsym XF86MonBrightnessDown exec --no-startup-id "brightnessctl set 10%- && notify-send 'brightness down'"
 
 bindsym $mod+Shift+t exec --no-startup-id pkill picom
 bindsym $mod+Ctrl+t exec --no-startup-id picom -b
