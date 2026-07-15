@@ -186,7 +186,6 @@ main() {
         else
             log_warn "Skipping Xkbmap apply (setxkbmap or DISPLAY unavailable)"
         fi
-        safe_link "$PROJECT_DIR/autorandr/settings.ini" "$HOME/.config/autorandr/settings.ini" "autorandr settings"
     else
         if [[ "$MACHINE_ROLE" == server ]]; then
             if [[ "$DRY_RUN" == true ]]; then

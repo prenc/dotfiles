@@ -1,5 +1,5 @@
 function fish_prompt --description 'Write out the prompt'
-	set -l last_status $status
+    set -l last_status $status
     set -l machine_role local
     if test -f ~/.config/dotfiles/machine-role
         set machine_role (string trim (cat ~/.config/dotfiles/machine-role))
@@ -21,7 +21,7 @@ function fish_prompt --description 'Write out the prompt'
         set -g __fish_git_prompt_color_branch magenta --bold
     end
     if not set -q __fish_git_prompt_showupstream
-        set -g __fish_git_prompt_showupstream "informative"
+        set -g __fish_git_prompt_showupstream informative
     end
     if not set -q __fish_git_prompt_char_upstream_ahead
         set -g __fish_git_prompt_char_upstream_ahead "↑"

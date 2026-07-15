@@ -249,7 +249,7 @@ client.background       #2B2C2B
 gaps inner 6
 gaps outer -2
 smart_gaps on
-smart_borders on
+hide_edge_borders smart
 
 set $mode_gaps Gaps: (o) outer, (i) inner
 set $mode_gaps_outer Outer Gaps: +|-|0 (local), Shift + +|-|0 (global)

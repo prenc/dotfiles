@@ -155,8 +155,9 @@ detect_package_manager() {
 install_package() {
     local pkg="$1"
     local pm="$2"
+    local command_name="${3:-$pkg}"
 
-    if command_exists "$pkg"; then
+    if command_exists "$command_name"; then
         log_info "$pkg already installed"
         return 0
     fi
@@ -211,11 +212,22 @@ install_package() {
 install_packages() {
     local os="$1"
     local pm=$(detect_package_manager "$os")
+    local core_packages=(git vim tmux fish alacritty ripgrep)
+    local core_commands=(git vim tmux fish alacritty rg)
 
     log_step "Installing dependencies"
 
     if [[ "${NO_SUDO:-false}" == true ]]; then
         log_warn "Skipping system packages because --no-sudo was specified"
+        for i in "${!core_packages[@]}"; do
+            if command_exists "${core_commands[$i]}"; then
+                pkg="${core_packages[$i]}"
+                printf '✓ %s installed\n' "$pkg"
+            else
+                pkg="${core_packages[$i]}"
+                printf '✗ %s missing\n' "$pkg"
+            fi
+        done
         return 0
     fi
 
@@ -236,11 +248,7 @@ install_packages() {
 
     log_info "Using package manager: $pm"
 
-    # Core packages
-    install_package "git" "$pm"
-    install_package "vim" "$pm"
-    install_package "tmux" "$pm"
-    install_package "fish" "$pm"
-    install_package "alacritty" "$pm"
-    install_package "ripgrep" "$pm"
+    for i in "${!core_packages[@]}"; do
+        install_package "${core_packages[$i]}" "$pm" "${core_commands[$i]}"
+    done
 }

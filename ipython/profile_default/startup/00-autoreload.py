@@ -13,11 +13,10 @@ from pathlib import Path
 ip = get_ipython()
 if ip is not None:
     ip.run_line_magic("load_ext", "autoreload")
-    ip.run_line_magic("autoreload", "2")
+    ip.run_line_magic("autoreload", "3")
     ip.run_line_magic("xmode", "Context")
 
     try:
         import polars as pl
     except Exception:
         pass
-
