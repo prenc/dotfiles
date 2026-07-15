@@ -34,6 +34,9 @@ Plug 'preservim/nerdtree'
 Plug 'junegunn/vim-peekaboo'
 Plug 'jpalardy/vim-slime'
 
+" Clipboard
+Plug 'ojroques/vim-oscyank'
+
 " Theme
 Plug 'vim-airline/vim-airline'
 Plug 'vim-airline/vim-airline-themes'
@@ -175,8 +178,10 @@ nnoremap <leader>f :ProjectFiles<CR>
 nnoremap <leader>p :CopyView<CR>
 " Switch between open buffers.
 nnoremap <leader>b :Buffers<CR>
-" Search file contents with The Silver Searcher.
-nnoremap <leader>a :Ag<CR>
+" Search file contents with ripgrep.
+nnoremap <leader>a :Rg<CR>
+" Copy the visual selection through the terminal clipboard.
+vnoremap <leader>y :OSCYank<CR>
 
 nnoremap <leader>gs :Git <CR>
 nnoremap <leader>gc :Git commit<CR>
