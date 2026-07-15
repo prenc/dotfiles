@@ -57,10 +57,8 @@ call plug#end()
 
 " Defaults --------------------------------------------------------------------
 
-set nocompatible
-
 set laststatus=2
-set t_Co=256
+set termguicolors
 
 set relativenumber number "hybrid
 set linebreak

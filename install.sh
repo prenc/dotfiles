@@ -4,7 +4,7 @@ set -euo pipefail
 # ============================================================================
 # Dotfiles Installer
 # Supports: macOS, Linux
-# Usage: ./install.sh --machine-role [local|server] [--dry-run] [--no-color] [--skip-packages]
+# Usage: ./install.sh [--machine-role local|server] [--dry-run] [--no-color] [--skip-packages]
 # ============================================================================
 
 PROJECT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
@@ -13,6 +13,7 @@ NO_COLOR=false
 SKIP_PACKAGES=false
 MACHINE_ROLE=""
 BACKUP_DIR="$HOME/.dotfiles_backup/$(date +%Y%m%d_%H%M%S)"
+ROLE_FILE="$HOME/.config/dotfiles/machine-role"
 
 # Parse arguments
 while [[ $# -gt 0 ]]; do
@@ -34,8 +35,8 @@ while [[ $# -gt 0 ]]; do
             shift
             ;;
         --help|-h)
-            echo "Usage: $0 --machine-role [local|server] [--dry-run] [--no-color] [--skip-packages]"
-            echo "  --machine-role  Required machine role: local or server"
+            echo "Usage: $0 [--machine-role local|server] [--dry-run] [--no-color] [--skip-packages]"
+            echo "  --machine-role  Machine role; defaults to the saved role when available"
             echo "  --dry-run       Show what would be done without making changes"
             echo "  --no-color      Disable colored output"
             echo "  --skip-packages Skip installing system packages"
@@ -49,8 +50,12 @@ while [[ $# -gt 0 ]]; do
     esac
 done
 
+if [[ -z "$MACHINE_ROLE" && -r "$ROLE_FILE" ]]; then
+    MACHINE_ROLE="$(sed -n '1p' "$ROLE_FILE")"
+fi
+
 if [[ -z "$MACHINE_ROLE" ]]; then
-    echo "Missing required argument: --machine-role [local|server]" >&2
+    echo "Missing machine role; pass --machine-role [local|server] or create $ROLE_FILE" >&2
     exit 1
 fi
 

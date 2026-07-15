@@ -232,4 +232,5 @@ install_packages() {
     install_package "tmux" "$pm"
     install_package "fish" "$pm"
     install_package "alacritty" "$pm"
+    install_package "ripgrep" "$pm"
 }
