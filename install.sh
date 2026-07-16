@@ -170,6 +170,7 @@ main() {
     safe_link "$PROJECT_DIR/fish/config.fish" "$HOME/.config/fish/config.fish" "fish/config.fish"
     safe_link "$PROJECT_DIR/fish/functions/fish_mode_prompt.fish" "$HOME/.config/fish/functions/fish_mode_prompt.fish" "fish_mode_prompt.fish"
     safe_link "$PROJECT_DIR/fish/functions/fish_prompt.fish" "$HOME/.config/fish/functions/fish_prompt.fish" "fish_prompt.fish"
+    safe_link "$PROJECT_DIR/fish/functions/fish_right_prompt.fish" "$HOME/.config/fish/functions/fish_right_prompt.fish" "fish_right_prompt.fish"
 
     # --- i3 (Linux only) ---
     log_step "Configuring i3"
