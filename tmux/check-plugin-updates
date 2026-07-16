@@ -1,0 +1,31 @@
+#!/bin/sh
+
+# Report available TPM plugin updates without fetching or changing checkouts.
+plugins_dir="$HOME/.tmux/plugins"
+lock_dir="${TMPDIR:-/tmp}/tmux-plugin-update-check-${UID:-$(id -u)}.lock"
+client="${1:-}"
+
+[ -d "$plugins_dir" ] || exit 0
+mkdir "$lock_dir" 2>/dev/null || exit 0
+trap 'rmdir "$lock_dir"' EXIT HUP INT TERM
+
+updates=""
+for plugin_dir in "$plugins_dir"/*; do
+    [ -d "$plugin_dir/.git" ] || continue
+
+    local_commit=$(git -C "$plugin_dir" rev-parse HEAD 2>/dev/null) || continue
+    remote_commit=$(git -C "$plugin_dir" ls-remote origin HEAD 2>/dev/null | awk 'NR == 1 { print $1 }')
+
+    if [ -n "$remote_commit" ] && [ "$local_commit" != "$remote_commit" ]; then
+        updates="${updates}${updates:+, }$(basename "$plugin_dir")"
+    fi
+done
+
+[ -n "$updates" ] || exit 0
+
+message="Tmux plugin updates available. Run: Prefix + U"
+if [ -n "$client" ]; then
+    tmux display-message -c "$client" -d 6000 "$message"
+else
+    tmux display-message -d 6000 "$message"
+fi

@@ -130,6 +130,8 @@ main() {
     # --- Tmux ---
     log_step "Configuring tmux"
     safe_link "$PROJECT_DIR/tmux.conf" "$HOME/.tmux.conf" "tmux.conf"
+    safe_link "$PROJECT_DIR/tmux/check-plugin-updates" "$HOME/.tmux/check-plugin-updates" "tmux plugin update checker"
+    safe_link "$PROJECT_DIR/tmux/update-all-plugins" "$HOME/.tmux/update-all-plugins" "tmux plugin updater"
     safe_clone "https://github.com/tmux-plugins/tpm" "$HOME/.tmux/plugins/tpm" "tpm (tmux plugin manager)"
 
     # --- Alacritty ---

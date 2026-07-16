@@ -1,0 +1,11 @@
+#!/bin/sh
+
+log_file="$HOME/.tmux/plugin-update.log"
+
+tmux display-message "Updating tmux plugins..."
+if "$HOME/.tmux/plugins/tpm/bin/update_plugins" all >"$log_file" 2>&1; then
+    tmux source-file "$HOME/.tmux.conf"
+    tmux display-message -d 6000 "Tmux plugins updated."
+else
+    tmux display-message -d 8000 "Tmux plugin update failed. See ~/.tmux/plugin-update.log"
+fi
