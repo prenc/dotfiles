@@ -52,6 +52,9 @@ bindsym $mod+t layout toggle
 bindsym $mod+Shift+space floating toggle
 bindsym $mod+space focus mode_toggle
 
+# Keep dialogs and floating utility windows available while an app is fullscreen.
+popup_during_fullscreen all
+
 ##### Scratchpad ##############################################################
 
 bindsym $mod+Shift+Tab move scratchpad
@@ -66,14 +69,15 @@ bindsym $mod+Ctrl+l workspace next
 bindsym $mod+Ctrl+greater move workspace to output right
 bindsym $mod+Ctrl+less move workspace to output left
 
-set $ws1 1:
-set $ws2 2:IDE
-set $ws3 3:WORK
-set $ws4 4:MAIL
-set $ws5 5:Q
-set $ws6 6:TERM
-set $ws7 7:TEAMS
-set $ws8 8:SLACK
+# Keep icon-only workspace labels with breathing room in i3bar.
+set $ws1 "1: <span size='large'></span> "
+set $ws2 "2: <span size='large'></span> "
+set $ws3 "3: <span size='large'></span> "
+set $ws4 "4: <span size='large'></span> "
+set $ws5 "5: <span size='large'></span> "
+set $ws6 "6: <span size='large'></span> "
+set $ws7 "7: <span size='large'></span> "
+set $ws8 "8: <span size='large'></span> "
 
 bindsym $mod+1 workspace $ws1
 bindsym $mod+2 workspace $ws2
