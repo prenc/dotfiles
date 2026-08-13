@@ -33,7 +33,13 @@ end
 
 if test "$MACHINE_ROLE" = server
     if command -q squeue
-        alias squeue="squeue --format '%.18i;%.5u;%.2t;%.10M;%.10l;%.5D;%.16R;%C;%b;%j' | sed 's/^[ \t]*//' | column -s';' -t"
+        function squeue --wraps squeue --description 'Show Slurm jobs in a compact table'
+            command squeue $argv \
+                --format '%.18i;%.5u;%.2t;%.10M;%.10l;%.5D;%.16R;%C;%.10mMiB;%b;%j' \
+            | sed 's/^[ \t]*//' \
+            | numfmt --header --delimiter=';' --field=9 --from=iec-i --to=iec-i --suffix=B \
+            | column -s';' -t
+        end
     end
 end
 
