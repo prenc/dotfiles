@@ -132,6 +132,8 @@ main() {
     safe_link "$PROJECT_DIR/tmux.conf" "$HOME/.tmux.conf" "tmux.conf"
     safe_link "$PROJECT_DIR/tmux/check-plugin-updates" "$HOME/.tmux/check-plugin-updates" "tmux plugin update checker"
     safe_link "$PROJECT_DIR/tmux/update-all-plugins" "$HOME/.tmux/update-all-plugins" "tmux plugin updater"
+    safe_link "$PROJECT_DIR/tmux/window-name" "$HOME/.tmux/window-name" "tmux window name helper"
+    safe_link "$PROJECT_DIR/tmux/update-window-name" "$HOME/.tmux/update-window-name" "tmux window name updater"
     safe_clone "https://github.com/tmux-plugins/tpm" "$HOME/.tmux/plugins/tpm" "tpm (tmux plugin manager)"
 
     # --- Alacritty ---

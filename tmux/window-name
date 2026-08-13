@@ -1,0 +1,19 @@
+#!/bin/sh
+
+directory=$1
+command_name=$2
+
+while [ -n "$directory" ]; do
+    if [ -e "$directory/.git" ] || [ -e "$directory/.venv" ]; then
+        basename "$directory"
+        exit 0
+    fi
+
+    [ "$directory" = / ] && break
+
+    parent=$(dirname "$directory")
+    [ "$parent" = "$directory" ] && break
+    directory=$parent
+done
+
+printf '%s\n' "$command_name"
