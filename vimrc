@@ -76,7 +76,7 @@ set noswapfile
 set undofile
 set undodir=~/.vim/undo//
 set bg=dark
-set autochdir
+set noautochdir
 set autoread
 
 set updatetime=1000
@@ -138,18 +138,13 @@ let g:VM_maps['Find Under']         = '<C-n>'
 let g:VM_maps['Find Subword Under'] = '<C-n>'
 let g:VM_maps['Select All']         = '<C-a>'
 
-function! s:ProjectFiles() abort
-    let l:roots = systemlist('git rev-parse --show-toplevel')
-    if v:shell_error || empty(l:roots)
-        Files
-        return
-    endif
-
-    execute 'Files' fnameescape(l:roots[0])
-endfunction
-
-command! ProjectFiles call s:ProjectFiles()
 command! CopyView %write !less -R
+
+function! s:SearchContents(directory) abort
+    let l:command = 'rg --column --line-number --no-heading --color=always --smart-case -- '
+    let l:options = fzf#vim#with_preview({'dir': a:directory})
+    call fzf#vim#grep(l:command . fzf#shellescape(''), l:options, 0)
+endfunction
 
 " Keybindings -----------------------------------------------------------------
 
@@ -168,16 +163,23 @@ ino <Right> <Nop>
 
 set splitbelow splitright
 
-" Search tracked files in the current Git repository.
-nnoremap <C-p> :GFiles<CR>
-" Search files from the current Git repository root.
-nnoremap <leader>f :ProjectFiles<CR>
+" Search Git-tracked files or files in the current buffer's directory.
+nnoremap <leader>p :GFiles<CR>
+nnoremap <leader>P :execute 'Files' fnameescape(expand('%:p:h'))<CR>
 " View the current buffer in a terminal pager for easy copying.
-nnoremap <leader>p :CopyView<CR>
+nnoremap <leader>v :CopyView<CR>
 " Switch between open buffers.
 nnoremap <leader>b :Buffers<CR>
-" Search file contents with ripgrep.
+" Search lines in the current buffer or across all loaded buffers.
+nnoremap <leader>/ :BLines<CR>
+nnoremap <leader>l :Lines<CR>
+" Reopen recent files and search Vim commands or marks.
+nnoremap <leader>r :History<CR>
+nnoremap <leader>c :Commands<CR>
+nnoremap <leader>m :Marks<CR>
+" Search file contents from Vim's working directory or the current buffer's directory.
 nnoremap <leader>a :Rg<CR>
+nnoremap <leader>A :call <SID>SearchContents(expand('%:p:h'))<CR>
 " Copy the visual selection through the terminal clipboard.
 vnoremap <leader>y :OSCYank<CR>
 
