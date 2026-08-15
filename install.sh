@@ -132,8 +132,6 @@ main() {
     safe_link "$PROJECT_DIR/tmux.conf" "$HOME/.tmux.conf" "tmux.conf"
     safe_link "$PROJECT_DIR/tmux/check-plugin-updates" "$HOME/.tmux/check-plugin-updates" "tmux plugin update checker"
     safe_link "$PROJECT_DIR/tmux/update-all-plugins" "$HOME/.tmux/update-all-plugins" "tmux plugin updater"
-    safe_link "$PROJECT_DIR/tmux/window-name" "$HOME/.tmux/window-name" "tmux window name helper"
-    safe_link "$PROJECT_DIR/tmux/update-window-name" "$HOME/.tmux/update-window-name" "tmux window name updater"
     safe_clone "https://github.com/tmux-plugins/tpm" "$HOME/.tmux/plugins/tpm" "tpm (tmux plugin manager)"
 
     # --- Alacritty ---
@@ -170,6 +168,7 @@ main() {
     # --- Fish ---
     log_step "Configuring fish"
     safe_link "$PROJECT_DIR/fish/config.fish" "$HOME/.config/fish/config.fish" "fish/config.fish"
+    safe_link "$PROJECT_DIR/fish/conf.d/tmux-anchor-window-name.fish" "$HOME/.config/fish/conf.d/tmux-anchor-window-name.fish" "tmux anchor window name Fish integration"
     safe_link "$PROJECT_DIR/fish/functions/fish_mode_prompt.fish" "$HOME/.config/fish/functions/fish_mode_prompt.fish" "fish_mode_prompt.fish"
     safe_link "$PROJECT_DIR/fish/functions/fish_prompt.fish" "$HOME/.config/fish/functions/fish_prompt.fish" "fish_prompt.fish"
     safe_link "$PROJECT_DIR/fish/functions/fish_right_prompt.fish" "$HOME/.config/fish/functions/fish_right_prompt.fish" "fish_right_prompt.fish"

@@ -43,16 +43,6 @@ if test "$MACHINE_ROLE" = server
     end
 end
 
-function __tmux_window_name --on-variable PWD --description 'Name tmux windows after project directories'
-    status is-interactive; or return
-    set -q TMUX_PANE; or return
-    test -x "$HOME/.tmux/update-window-name"; or return
-
-    command "$HOME/.tmux/update-window-name" "$TMUX_PANE"
-end
-
-__tmux_window_name
-
 function fish_user_key_bindings
     for mode in insert default visual
         bind -M $mode \cf forward-char
